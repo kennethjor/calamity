@@ -1,0 +1,15 @@
+{
+	"author": "Kenneth Jorgensen",
+    "name": "calamity",
+    "fullname": "CalamityJS",
+	"description": "",
+	"version": "0.0.1",
+	"homepage": "http://kennethjorgensen.co.uk/projects/calamityjs",
+	"repository": {
+		"type": "hg",
+		"url": "https://bitbucket.org/kennethjor/calamityjs"
+	},
+	"dependencies": {
+        "grunt-contrib-coffee": ">= 0.3.2"
+	}
+}
