@@ -4,22 +4,13 @@ module.exports = function(grunt) {
 	grunt.initConfig({
 		pkg: '<json:package.json>',
 		meta: {
-			banner: [
-				"/*!",
-				" <%= pkg.fullname %> <%= pkg.version %>",
-				" Built <%= grunt.template.today('yyyy-mm-dd') %>",
-				" <%= pkg.homepage %>",
-				" Copyright (c) <%= grunt.template.today('yyyy') %> <%= pkg.author.name %>;",
-				" Licensed <%= _.pluck(pkg.licenses, 'type').join(', ') %>",
-				"/"
-			].join("\n *")
-
+			banner: "/*! <%= pkg.fullname %> <%= pkg.version %> - <%= pkg.homepage %> */"
 		},
 
 		coffee: {
 			compile: {
 				files: {
-					"build/<%= pkg.name %>.js": ["src/**/*.coffee"],
+					"build/<%= pkg.name %>.js": ["src/**/*.coffee"]
 				}
 			}
 		},
@@ -50,7 +41,7 @@ module.exports = function(grunt) {
 		watch: {
 			files: "src/**",
 			tasks: "default"
-		},
+		}
 //		uglify: {}
 	});
 
