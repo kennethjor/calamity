@@ -8,12 +8,17 @@ module.exports = function(grunt) {
 		},
 
 		coffee: {
-			compile: {
+			main: {
 				files: {
 					"build/<%= pkg.name %>.js": ["src/**/*.coffee"]
 				},
 				options: {
 					bare: true
+				}
+			},
+			tests: {
+				files: {
+					"build/test/*.js": ["test/**/*.coffee"]
 				}
 			}
 		},
@@ -35,6 +40,9 @@ module.exports = function(grunt) {
 				dest: "build/dist/<%= pkg.name %>-min.js"
 			}
 		},
+		test: {
+			files: "<%= _.keys(coffee.tests.files) %>"
+		},
 //		"require-dir": {
 //			main: {
 //				src: "src/*",
@@ -50,17 +58,20 @@ module.exports = function(grunt) {
 //			files: ['grunt.js', 'lib/**/*.js', 'test/**/*.js']
 //		},
 		watch: {
-			files: "src/**",
+			files: [
+				"src/**",
+				"test/**"
+			],
 			tasks: "default"
 		},
 		uglify: {}
 	});
 
-	// Load grunt plugins
+	// Load grunt plugins.
 	grunt.loadNpmTasks("grunt-contrib-coffee");
 //	grunt.loadNpmTasks('grunt-require-dir');
 
 	// Default task.
-	grunt.registerTask("default", "coffee concat min");
+	grunt.registerTask("default", "coffee concat min test");
 
 };
