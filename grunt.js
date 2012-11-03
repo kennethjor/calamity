@@ -69,7 +69,7 @@ module.exports = function(grunt) {
 
 	// Load grunt plugins.
 	grunt.loadNpmTasks("grunt-contrib-coffee");
-//	grunt.loadNpmTasks('grunt-require-dir');
+	grunt.loadNpmTasks('grunt-require-dir');
 
 	// Default task.
 	grunt.registerTask("default", "coffee concat min test");
