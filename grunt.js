@@ -4,13 +4,16 @@ module.exports = function(grunt) {
 	grunt.initConfig({
 		pkg: '<json:package.json>',
 		meta: {
-			banner: "/*! <%= pkg.fullname %> <%= pkg.version %> - <%= pkg.homepage %> */"
+			banner: "/*! <%= pkg.fullname %> <%= pkg.version %> - <%= pkg.homepage %> */",
+			wrapperVersion: "C.VERSION = \"<%= pkg.version %>\";",
+			wrapperStart: "(function(){",
+			wrapperEnd: "})();"
 		},
 
 		coffee: {
 			main: {
 				files: {
-					"build/<%= pkg.name %>.js": ["src/**/*.coffee"]
+					"build/tmp/<%= pkg.name %>.js": ["src/calamity/*.coffee"]
 				},
 				options: {
 					bare: true
@@ -26,7 +29,11 @@ module.exports = function(grunt) {
 			main: {
 				src: [
 					"<banner:meta.banner>",
-					"build/<%= pkg.name %>.js"
+					"<banner:meta.wrapperStart>",
+					"src/init/init.js",
+					"<banner:meta.wrapperVersion>",
+					"build/tmp/<%= pkg.name %>.js",
+					"<banner:meta.wrapperEnd>"
 				],
 				dest: "build/dist/<%= pkg.name %>.js"
 			}
@@ -43,14 +50,14 @@ module.exports = function(grunt) {
 		test: {
 			files: "<%= _.keys(coffee.tests.files) %>"
 		},
-//		"require-dir": {
-//			main: {
-//				src: "src/*",
-//				baseDir: "src/",
-//				prefixDir: "calamity/",
-//				dest: "build/amd.js"
-//			}
-//		},
+		"require-dir": {
+			main: {
+				src: "src/*",
+				baseDir: "src/",
+				prefixDir: "calamity/",
+				dest: "build/amd.js"
+			}
+		},
 //		test: {
 //			files: ['test/**/*.js']
 //		},

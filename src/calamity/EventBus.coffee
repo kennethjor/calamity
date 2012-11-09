@@ -1,8 +1,5 @@
-if !_ and require
-	_ = require "underscore"
-
 # The EventBus manages passing events between different modules.
-module.exports["EventBus"] = class EventBus
+EventBus = class C.EventBus
 	constructor: ->
 		# Registered handlers
 		@handlers = {}
