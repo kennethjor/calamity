@@ -9,6 +9,12 @@
 		"type": "hg",
 		"url": "https://bitbucket.org/kennethjor/calamityjs"
 	},
+	"licenses": [
+		{
+			"type" : "MIT",
+			"url" : "https://bitbucket.org/kennethjor/calamityjs/raw/default/LICENSE"
+		}
+	],
 	"dependencies": {
 		"underscore": ">= 0.3.0"
 	},

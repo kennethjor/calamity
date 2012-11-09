@@ -4,7 +4,7 @@ module.exports = function(grunt) {
 	grunt.initConfig({
 		pkg: '<json:package.json>',
 		meta: {
-			banner: "/*! <%= pkg.fullname %> <%= pkg.version %> - <%= pkg.homepage %> */",
+			banner: "/*! <%= pkg.fullname %> <%= pkg.version %> - MIT license */",
 			wrapperVersion: "C.VERSION = \"<%= pkg.version %>\";",
 			wrapperStart: "(function(){",
 			wrapperEnd: "})();"
