@@ -28,7 +28,7 @@ module.exports = function(grunt) {
 		concat: {
 			main: {
 				src: [
-					"<banner:meta.banner>",
+					"<banner>",
 					"<banner:meta.wrapperStart>",
 					"src/init/init.js",
 					"<banner:meta.wrapperVersion>",
@@ -41,7 +41,7 @@ module.exports = function(grunt) {
 		min: {
 			main: {
 				src: [
-					"<banner:meta.banner>",
+					"<banner>",
 					"<config:concat.main.dest>"
 				],
 				dest: "build/dist/<%= pkg.name %>-min.js"
