@@ -48,4 +48,6 @@ exports.tests =
 
 	# Tests wildcard subscriptions.
 	"wildcard subscription": (test) ->
-		test.done()
+		bus.subscribe "*", ->
+			test.done()
+		bus.publish "something"
