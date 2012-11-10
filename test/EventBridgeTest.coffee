@@ -1,4 +1,4 @@
-calamity = require("../dist/calamity.js")
+calamity = require "../dist/calamity.js"
 
 bus1 = null
 bus2 = null

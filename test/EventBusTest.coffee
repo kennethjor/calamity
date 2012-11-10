@@ -1,4 +1,4 @@
-calamity = require("../dist/calamity.js")
+calamity = require "../dist/calamity.js"
 async = require "async"
 
 bus = null
@@ -28,7 +28,7 @@ exports.tests =
 			(callback) ->
 				next = callback
 				bus.publish "address1"
-			# Check callbacks counts.
+			# Check callback counts.
 			(callback) ->
 				test.equals(n1, 1)
 				test.equals(n2, 0)
