@@ -34,3 +34,7 @@ exports.tests =
 		test.equals(n2, 1)
 
 		test.done()
+
+	# Tests wildcard subscriptions.
+	"wildcard subscription": (test) ->
+		test.done()
