@@ -1,4 +1,5 @@
 calamity = require("../dist/calamity.js")
+async = require "async"
 
 bus = null
 
@@ -9,31 +10,41 @@ exports.tests =
 
 	# Simple pub/sub tests.
 	"simple pubsub": (test) ->
+		next = null
 		# Setup two handlers.
 		n1 = 0
+		n2 = 0
 		handler1 = ->
 			n1++
-		bus.subscribe "address1", handler1
-
-		n2 = 0
+			next()
 		handler2 = ->
 			n2++
+			next()
+		bus.subscribe "address1", handler1
 		bus.subscribe "address2", handler2
 
-		# Publish to both of them.
-		bus.publish "address1"
-		test.equals(n1, 1)
-		test.equals(n2, 0)
-		bus.publish "address2"
-		test.equals(n1, 1)
-		test.equals(n2, 1)
+		async.series [
+			# Publsh to the first address.
+			(callback) ->
+				next = callback
+				bus.publish "address1"
+			# Check callbacks counts.
+			(callback) ->
+				test.equals(n1, 1)
+				test.equals(n2, 0)
+				callback()
+			# Publish to second address.
+			(callback) ->
+				next = callback
+				bus.publish "address2"
+			# Check callback counts.
+			(callback) ->
+				test.equals(n1, 1)
+				test.equals(n2, 1)
+				callback()
 
-		# Publish to somewhere unknown.
-		bus.publish "address3"
-		test.equals(n1, 1)
-		test.equals(n2, 1)
-
-		test.done()
+				test.done()
+		]
 
 	# Tests wildcard subscriptions.
 	"wildcard subscription": (test) ->

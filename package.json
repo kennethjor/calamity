@@ -19,6 +19,7 @@
 		"underscore": ">= 0.3.0"
 	},
 	"devDependencies": {
-		"grunt-contrib-coffee": ">= 0.3.2"
+		"grunt-contrib-coffee": ">= 0.3.2",
+		"async": ">= 0.1.22"
 	}
 }

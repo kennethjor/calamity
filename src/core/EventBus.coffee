@@ -25,7 +25,10 @@ EventBus = class C.EventBus
 		# Check if we have handlers for this address.
 		return unless @handlers[address]
 		# Send to handlers.
-		for h in @handlers[address]
-			h(msg)
+		for handler in @handlers[address]
+			do (handler) ->
+				_.defer ->
+					handler(msg)
+				return
 
 		return @
