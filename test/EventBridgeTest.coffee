@@ -1,44 +1,75 @@
 calamity = require "../dist/calamity.js"
+async = require "async"
 
-bus1 = null
-bus2 = null
+bus = null
 bridge = null
+
+next = null
+n = null
+msg = null
+handler = null
 
 exports.tests =
 	setUp: (done) ->
 		# Construct two event busses and connect then via a bridge.
-		bus1 = new calamity.EventBus()
-		bus2 = new calamity.EventBus()
+		bus = [
+			new calamity.EventBus()
+			new calamity.EventBus()
+		]
 		bridge = new calamity.MemoryEventBridge()
-			.connect(bus1)
-			.connect(bus2)
+			.connect(bus[0])
+			.connect(bus[1])
+		# Construct handlers and subscribe.
+		next = () ->
+			return
+		n = []
+		msg = []
+		handler = []
+		for a in [0..1]
+			n.push []
+			msg.push []
+			handler.push []
+			for b in [0..1]
+				n[a].push 0
+				msg[a].push null
+				do (a, b) ->
+					h = (m) ->
+						n[a][b]++
+						msg[a][b] = m
+						next()
+					handler[a].push h
+					bus[a].subscribe "address"+b, h
+
 		done()
 
 	# Simple connection test.
 	"simple connection": (test) ->
-		test.done()
-		return
-
-
-
-		# Setup counters and register on both busses
-		n11 = n12 = n21 = n22 = 0
-
-		bus1.subscribe "a1", ->
-			n11++
-		bus1.subscribe "a2", ->
-			n12++
-		bus2.subscribe "a1", ->
-			n21++
-		bus2.subscribe "a2", ->
-			n22++
-
-		# Publish to address on either bus and entire connection across bridge.
-		bus1.publish "a1"
-		test.equals n11, 1
-		test.equals n21, 1
-		bus2.publish "a2"
-		test.equals n12, 1
-		test.equals n22, 1
-
-		test.done()
+		async.series [
+			# Publish on one bus.
+			(callback) ->
+				next = callback
+				bus[0].publish "address0", "data0"
+			# Verify calls.
+			(callback) ->
+				test.equals 1, n[0][0]
+				test.equals 0, n[0][1]
+				test.equals 1, n[1][0]
+				test.equals 0, n[1][1]
+				test.equals "data0", msg[0][0]
+				test.equals "data0", msg[1][0]
+				callback()
+			# Publish on the other bus.
+			(callback) ->
+				next = callback
+				bus[1].publish "address1", "data1"
+			# Verify calls.
+			(callback) ->
+				test.equals 1, n[0][0]
+				test.equals 1, n[0][1]
+				test.equals 1, n[1][0]
+				test.equals 1, n[1][1]
+				test.equals "data1", msg[0][1]
+				test.equals "data1", msg[1][1]
+				callback()
+				test.done()
+		]

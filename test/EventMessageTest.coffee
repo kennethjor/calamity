@@ -30,7 +30,7 @@ exports.tests =
 		async.series [
 			(callback) ->
 				next = callback
-				msg.reply("replydata")
+				msg.reply "replydata"
 				test.equals 0, replies
 			(callback) ->
 				test.equals 1, replies
