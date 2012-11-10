@@ -19,7 +19,6 @@
 		"underscore": ">= 0.3.0"
 	},
 	"devDependencies": {
-		"grunt-contrib-coffee": ">= 0.3.2",
-		"grunt-require-dir": ">= 0.3.0"
+		"grunt-contrib-coffee": ">= 0.3.2"
 	}
 }

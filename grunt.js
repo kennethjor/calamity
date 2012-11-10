@@ -11,9 +11,9 @@ module.exports = function(grunt) {
 		},
 
 		coffee: {
-			main: {
+			core: {
 				files: {
-					"build/tmp/<%= pkg.name %>.js": ["src/calamity/*.coffee"]
+					"build/tmp/core.js": ["src/core/*.coffee"]
 				},
 				options: {
 					bare: true
@@ -26,23 +26,23 @@ module.exports = function(grunt) {
 			}
 		},
 		concat: {
-			main: {
+			core: {
 				src: [
 					"<banner>",
 					"<banner:meta.wrapperStart>",
 					"src/init/init.js",
 					"<banner:meta.wrapperVersion>",
-					"build/tmp/<%= pkg.name %>.js",
+					"build/tmp/core.js",
 					"<banner:meta.wrapperEnd>"
 				],
 				dest: "build/dist/<%= pkg.name %>.js"
 			}
 		},
 		min: {
-			main: {
+			core: {
 				src: [
 					"<banner>",
-					"<config:concat.main.dest>"
+					"<config:concat.core.dest>"
 				],
 				dest: "build/dist/<%= pkg.name %>-min.js"
 			}
@@ -50,33 +50,17 @@ module.exports = function(grunt) {
 		test: {
 			files: "<%= _.keys(coffee.tests.files) %>"
 		},
-		"require-dir": {
-			main: {
-				src: "src/*",
-				baseDir: "src/",
-				prefixDir: "calamity/",
-				dest: "build/amd.js"
-			}
-		},
-//		test: {
-//			files: ['test/**/*.js']
-//		},
-//		lint: {
-//			files: ['grunt.js', 'lib/**/*.js', 'test/**/*.js']
-//		},
 		watch: {
 			files: [
 				"src/**",
 				"test/**"
 			],
 			tasks: "default"
-		},
-		uglify: {}
+		}
 	});
 
 	// Load grunt plugins.
 	grunt.loadNpmTasks("grunt-contrib-coffee");
-	grunt.loadNpmTasks('grunt-require-dir');
 
 	// Default task.
 	grunt.registerTask("default", "coffee concat min test");
