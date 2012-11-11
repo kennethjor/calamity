@@ -32,7 +32,7 @@ EventMessage = class C.EventMessage
 
 	# Serializes the message as JSON.
 	serialize: ->
-		return undefined
+		return JSON.stringify @
 
 # Desrialises a message from JSON.
 EventMessage.deserialize = (json) ->

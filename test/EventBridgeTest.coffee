@@ -57,6 +57,7 @@ exports.tests =
 				#next = callback
 				bus[0].publish "address0", "data0"
 				_.delay callback, 100
+				#_.defer callback
 			# Verify calls.
 			(callback) ->
 				test.equals 1, n[0][0]

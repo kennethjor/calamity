@@ -41,8 +41,16 @@ exports.tests =
 
 	# Tests addBus() and sawBus()
 	"remember bus": (test) ->
+		test.expect 5
 		bus = new calamity.EventBus()
 		msg.addBus bus
 		test.ok msg.sawBus(bus)
 		test.ok !msg.sawBus(new calamity.EventBus())
+		# Add another bus
+		bus2 = new calamity.EventBus()
+		msg.addBus bus2
+		test.ok msg.sawBus(bus)
+		test.ok msg.sawBus(bus2)
+		test.ok !msg.sawBus(new calamity.EventBus())
+
 		test.done()
