@@ -23,6 +23,23 @@ exports.tests =
 		bus.subscribe "address2", handler2
 		done()
 
+	# Tests message creation.
+	"create message": (test) ->
+		test.expect 4
+		reply = (msg) ->
+			return
+		# Useful creation.
+		msg = bus._createMessage "address", "data", reply
+		test.equals "address", msg.address
+		test.equals "data", msg.data
+		test.strictEqual reply, msg._replyHandler
+		# Noop creation.
+		msg2 = bus._createMessage msg
+		test.strictEqual msg, msg2
+
+		test.done()
+
+
 	# Simple pub/sub tests.
 	"simple pubsub": (test) ->
 		async.series [

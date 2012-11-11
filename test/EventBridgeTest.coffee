@@ -22,35 +22,41 @@ exports.tests =
 		# Construct handlers and subscribe.
 		next = () ->
 			return
+		# Reset base containers.
 		n = []
 		msg = []
 		handler = []
+		# For each bus.
 		for a in [0..1]
 			n.push []
 			msg.push []
 			handler.push []
+			# For each address.
 			for b in [0..1]
 				n[a].push 0
 				msg[a].push null
 				do (a, b) ->
+					# Create handler.
 					h = (m) ->
 						n[a][b]++
 						msg[a][b] = m
 						next()
 					handler[a].push h
+					# Subscribe handler.
 					bus[a].subscribe "address"+b, h
-
 		done()
 
 	# Simple connection test.
 	"simple connection": (test) ->
 		test.done()
 		return
+		test.expect 12
 		async.series [
 			# Publish on one bus.
 			(callback) ->
-				next = callback
+				#next = callback
 				bus[0].publish "address0", "data0"
+				_.delay callback, 100
 			# Verify calls.
 			(callback) ->
 				test.equals 1, n[0][0]
@@ -62,8 +68,10 @@ exports.tests =
 				callback()
 			# Publish on the other bus.
 			(callback) ->
-				next = callback
+				#next = callback
 				bus[1].publish "address1", "data1"
+				_.delay callback, 100
+				#_.defer callback
 			# Verify calls.
 			(callback) ->
 				test.equals 1, n[0][0]

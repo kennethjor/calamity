@@ -17,10 +17,7 @@ EventBus = class C.EventBus
 
 	# Publishes an event to an address.
 	publish: (address, data, reply) ->
-		# Construct new EventMessage is necesarry.
-		msg = address
-		unless msg instanceof EventMessage
-			msg = new EventMessage address, data, reply
+		msg = @_createMessage address, data, reply
 		address = msg.address
 		# Check if message has already been processed by this bus.
 		return @ if msg.sawBus @
@@ -32,6 +29,15 @@ EventBus = class C.EventBus
 		@_publishAddress "*", msg
 
 		return @
+
+	# Utility function for creating messages.
+	_createMessage: (address, data, reply) ->
+		# Construct new EventMessage is necesarry.
+		msg = address
+		unless msg instanceof EventMessage
+			msg = new EventMessage address, data, reply
+		return msg
+
 
 	# Publishes a message to an address.
 	_publishAddress: (address, msg) ->
