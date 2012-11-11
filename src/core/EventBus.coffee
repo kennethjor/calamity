@@ -22,6 +22,8 @@ EventBus = class C.EventBus
 		unless msg instanceof EventMessage
 			msg = new EventMessage address, data, reply
 		address = msg.address
+		# Register this bus on the event
+		msg.addBus @
 		# Publish to target address.
 		@_publishAddress address, msg
 		# Publish to wildcard address.

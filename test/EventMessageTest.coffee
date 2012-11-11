@@ -38,3 +38,11 @@ exports.tests =
 				callback()
 				test.done()
 		]
+
+	# Tests addBus() and sawBus()
+	"remember bus": (test) ->
+		bus = new calamity.EventBus()
+		msg.addBus bus
+		test.ok msg.sawBus(bus)
+		test.ok !msg.sawBus(new calamity.EventBus())
+		test.done()
