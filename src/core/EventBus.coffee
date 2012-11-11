@@ -22,6 +22,15 @@ EventBus = class C.EventBus
 		unless msg instanceof EventMessage
 			msg = new EventMessage address, data, reply
 		address = msg.address
+		# Publish to target address.
+		@_publishAddress address, msg
+		# Publish to wildcard address.
+		@_publishAddress "*", msg
+
+		return @
+
+	# Publishes a message to an address.
+	_publishAddress: (address, msg) ->
 		# Check if we have handlers for this address.
 		return unless @handlers[address]
 		# Send to handlers.
@@ -31,4 +40,3 @@ EventBus = class C.EventBus
 					handler(msg)
 				return
 
-		return @
