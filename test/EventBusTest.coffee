@@ -32,6 +32,7 @@ exports.tests =
 		msg = bus._createMessage "address", "data", reply
 		test.equals "address", msg.address
 		test.equals "data", msg.data
+		# @todo Reply is testing the internals of EventMessage, not cool, but easier that executing the reply.
 		test.strictEqual reply, msg._replyHandler
 		# Noop creation.
 		msg2 = bus._createMessage msg
