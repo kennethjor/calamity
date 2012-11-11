@@ -2,27 +2,29 @@ calamity = require "../dist/calamity.js"
 async = require "async"
 
 bus = null
+next = null
+n1 = null
+n2 = null
+handler1 = ->
+	n1++
+	next()
+handler2 = ->
+	n2++
+	next()
 
 exports.tests =
 	setUp: (done) ->
 		bus = new calamity.EventBus()
-		done()
-
-	# Simple pub/sub tests.
-	"simple pubsub": (test) ->
 		next = null
 		# Setup two handlers.
 		n1 = 0
 		n2 = 0
-		handler1 = ->
-			n1++
-			next()
-		handler2 = ->
-			n2++
-			next()
 		bus.subscribe "address1", handler1
 		bus.subscribe "address2", handler2
+		done()
 
+	# Simple pub/sub tests.
+	"simple pubsub": (test) ->
 		async.series [
 			# Publsh to the first address.
 			(callback) ->
@@ -53,3 +55,24 @@ exports.tests =
 			test.equal("data", msg.data)
 			test.done()
 		bus.publish "something", "data"
+
+	# Tests repeated publishing of the same message.
+	"repeat publish": (test) ->
+		test.expect 1
+		msg = new calamity.EventMessage "address1"
+		async.series [
+			# Publish message twice
+			(callback) ->
+				next = callback
+				bus.publish msg
+			(callback) ->
+				# Next should NOT be called
+				next = ->
+					test.ok false, "repeated publish exection"
+				bus.publish msg
+				_.defer ->
+					test.ok true
+					callback()
+					test.done()
+		]
+

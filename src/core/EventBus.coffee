@@ -22,6 +22,8 @@ EventBus = class C.EventBus
 		unless msg instanceof EventMessage
 			msg = new EventMessage address, data, reply
 		address = msg.address
+		# Check if message has already been processed by this bus.
+		return @ if msg.sawBus @
 		# Register this bus on the event
 		msg.addBus @
 		# Publish to target address.
