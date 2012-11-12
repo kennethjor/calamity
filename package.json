@@ -1,7 +1,7 @@
 {
 	"fullname": "CalamityJS",
 	"name": "calamity",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"description": "EventBus",
 	"homepage": "https://bitbucket.org/kennethjor/calamityjs",
 	"bugs": "https://bitbucket.org/kennethjor/calamityjs/issues",
