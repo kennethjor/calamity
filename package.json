@@ -6,7 +6,6 @@
 	"homepage": "https://bitbucket.org/kennethjor/calamityjs",
 	"bugs": "https://bitbucket.org/kennethjor/calamityjs/issues",
 	"author": "Kenneth Jorgensen <kennethjor@gmail.com> (http://kennethjorgensen.com/)",
-	"files": ["calamity.js"],
 	"main": "calamity.js",
 	"repository": {
 		"type": "hg",
@@ -24,5 +23,13 @@
 	"devDependencies": {
 		"grunt-contrib-coffee": ">= 0.3.2",
 		"async": ">= 0.1.22"
-	}
+	},
+	"files": [
+		"calamity.js",
+		"calamity-min.js",
+		"package.json",
+		"LICENSE",
+		"README.md",
+		"CHANGELOG.md"
+	]
 }
