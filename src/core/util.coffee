@@ -6,7 +6,7 @@ HEX = "0123456789abcdef".split ""
 
 # Generic utility functions.
 util = C.util =
-	# Generates a 128 bit ID
+	# Generates a 128 bit ID.
 	genId: ->
 		id = ""
 		for i in [1..32]
