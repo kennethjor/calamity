@@ -3,9 +3,11 @@
 	"name": "calamity",
 	"version": "0.1.0",
 	"description": "EventBus",
-	"homepage": "http://kennethjorgensen.co.uk/projects/calamityjs",
+	"homepage": "https://bitbucket.org/kennethjor/calamityjs",
 	"bugs": "https://bitbucket.org/kennethjor/calamityjs/issues",
-	"author": "Kenneth Jorgensen",
+	"author": "Kenneth Jorgensen <kennethjor@gmail.com> (http://kennethjorgensen.com/)",
+	"files": ["calamity.js"],
+	"main": "calamity.js",
 	"repository": {
 		"type": "hg",
 		"url": "https://bitbucket.org/kennethjor/calamityjs"

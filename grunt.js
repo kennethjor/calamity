@@ -53,7 +53,7 @@ module.exports = function(grunt) {
 					"<%= _.keys(coffee.core_second.files)[0] %>",
 					"<banner:meta.wrapperEnd>"
 				],
-				dest: "build/dist/<%= pkg.name %>.js"
+				dest: "<%= pkg.name %>.js"
 			}
 		},
 		min: {
@@ -63,7 +63,7 @@ module.exports = function(grunt) {
 					"<banner>",
 					"<config:concat.core_dist.dest>"
 				],
-				dest: "build/dist/<%= pkg.name %>-min.js"
+				dest: "<%= pkg.name %>-min.js"
 			}
 		},
 
