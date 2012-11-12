@@ -1,4 +1,4 @@
-calamity = require "../dist/calamity.js"
+calamity = require "../../dist/calamity.js"
 async = require "async"
 
 bus = null

@@ -11,6 +11,7 @@ module.exports = function(grunt) {
 		},
 
 		coffee: {
+			// Compiles the core coffee files.
 			core: {
 				files: {
 					"build/tmp/core.js": ["src/core/*.coffee"]
@@ -19,13 +20,16 @@ module.exports = function(grunt) {
 					bare: true
 				}
 			},
-			tests: {
+			// Compile the core test coffee files.
+			core_test: {
 				files: {
-					"build/test/*.js": ["test/**/*.coffee"]
+					"build/test/core/*.js": ["test/core/*.coffee"]
 				}
 			}
 		},
+
 		concat: {
+			// Assembles the core distribution files.
 			core: {
 				src: [
 					"<banner>",
@@ -39,6 +43,7 @@ module.exports = function(grunt) {
 			}
 		},
 		min: {
+			// Minimizes the core distribution files.
 			core: {
 				src: [
 					"<banner>",
@@ -47,9 +52,14 @@ module.exports = function(grunt) {
 				dest: "build/dist/<%= pkg.name %>-min.js"
 			}
 		},
+
 		test: {
-			files: "<%= _.keys(coffee.tests.files) %>"
+			files : [
+				// Core tests.
+				"<%= _.keys(coffee.core_test.files) %>"
+			]
 		},
+
 		watch: {
 			files: [
 				"src/**",
@@ -62,7 +72,11 @@ module.exports = function(grunt) {
 	// Load grunt plugins.
 	grunt.loadNpmTasks("grunt-contrib-coffee");
 
+	// Core compile.
+	grunt.registerTask("compile-core", "coffee:core concat:core min:core");
+	grunt.registerTask("test-core", "coffee:core_test test");
+
 	// Default task.
-	grunt.registerTask("default", "coffee concat min test");
+	grunt.registerTask("default", "compile-core test-core");
 
 };
