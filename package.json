@@ -2,14 +2,15 @@
 	"fullname": "CalamityJS",
 	"name": "calamity",
 	"version": "0.1.1",
-	"description": "EventBus",
+	"description": "An event bus library for event-driven applications.",
+	"keywords": ["events", "pubsub"],
 	"homepage": "https://bitbucket.org/kennethjor/calamityjs",
 	"bugs": "https://bitbucket.org/kennethjor/calamityjs/issues",
 	"author": "Kenneth Jorgensen <kennethjor@gmail.com> (http://kennethjorgensen.com/)",
 	"main": "calamity.js",
 	"repository": {
 		"type": "hg",
-		"url": "https://bitbucket.org/kennethjor/calamityjs"
+		"url": "ssh://hg@bitbucket.org/kennethjor/calamityjs"
 	},
 	"licenses": [
 		{
