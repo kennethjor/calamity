@@ -1,10 +1,12 @@
-# The `EventBridge` is responsible for transfering events between two EventBuses.
+# # EventBridge
+# Bridge for transfering events between two `EventBus` instances.
 EventBridge = class C.EventBridge
 	# Constructor.
 	constructor: () ->
 		@_busses = []
 		return
 
+	# ## `connect()`
 	# Connects this bridge to an event bus.
 	connect: (bus) ->
 		# Add to internal list.
@@ -14,6 +16,7 @@ EventBridge = class C.EventBridge
 
 		return @
 
+	# ## `handler()`
 	# Default noop handler.
 	handler: (msg) ->
 		return

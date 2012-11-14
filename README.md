@@ -55,6 +55,16 @@ When developing, executing watch immediately after the compile is very handy
 
     grunt default watch
 
+## Documentation
+To build the documentation you need to install Pygments and docco
+
+    sudo easy_install Pygments
+    sudo npm install -g docco
+
+Then you can generate the docs
+
+    ./docs.sh
+
 # Versioning
 CalamityJS follows the [semantic versioning][semver] specification.
 

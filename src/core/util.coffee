@@ -1,6 +1,10 @@
+# # util
+# A set of utilities used inside Calamity.
+
 # Import Math functions.
 random = Math.random
 floor = Math.floor
+
 # Hexadecimals.
 HEX = "0123456789abcdef".split ""
 

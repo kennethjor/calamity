@@ -1,3 +1,4 @@
+# # Subscription
 # Represents a subscription of a handler to an address on an bus.
 Subscription = class C.Subscription
 	# Constructor.
@@ -6,6 +7,7 @@ Subscription = class C.Subscription
 		@active = true
 		return
 
+	# ## `unsubscribe()`
 	# Shorthand for unsubscribing.
 	unsubscribe: ->
 		return unless @_active
@@ -13,6 +15,7 @@ Subscription = class C.Subscription
 		@active = false
 		return @
 
+	# ## `trigger()`
 	# Fires the handler with the supplied message.
 	trigger: (msg) ->
 		return @ unless @active

@@ -25,12 +25,16 @@
 		"grunt-contrib-coffee": ">= 0.3.2",
 		"async": ">= 0.1.22"
 	},
+	"scripts": {
+		"prepublish": "grunt && ./docs.sh"
+	},
 	"files": [
 		"calamity.js",
 		"calamity-min.js",
 		"package.json",
 		"LICENSE",
 		"README.md",
-		"CHANGELOG.md"
+		"CHANGELOG.md",
+		"docs"
 	]
 }

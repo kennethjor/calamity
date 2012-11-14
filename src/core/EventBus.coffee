@@ -1,4 +1,5 @@
-# The EventBus manages passing events between different modules.
+# # EventBus
+# Manages passing events from publishers to subscribers.
 EventBus = class C.EventBus
 	constructor: ->
 		# Generate ID.
@@ -6,6 +7,7 @@ EventBus = class C.EventBus
 		# Registered subscriptions container.
 		@_subscriptions = {}
 
+	# ## `subscribe()`
 	# Register a handler to an address.
 	subscribe: (address, handler, context) ->
 		# Initialize subscriptions container for this address.
@@ -18,6 +20,7 @@ EventBus = class C.EventBus
 		# Return subscription.
 		return sub
 
+	# ## `unsubscribe()`
 	# Unsubscribes a handler.
 	unsubscribe: (address, handler) ->
 		sub = address
@@ -38,6 +41,7 @@ EventBus = class C.EventBus
 					@_subscriptions[address].splice i
 		return
 
+	# ## `publish()`
 	# Publishes an event to an address.
 	publish: (address, data, reply) ->
 		msg = @_createMessage address, data, reply
