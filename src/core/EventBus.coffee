@@ -3,17 +3,40 @@ EventBus = class C.EventBus
 	constructor: ->
 		# Generate ID.
 		@id = util.genId()
-		# Registered handlers container.
-		@handlers = {}
+		# Registered subscriptions container.
+		@_subscriptions = {}
 
 	# Register a handler to an address.
 	subscribe: (address, handler, context) ->
-		context or= @
-		unless @handlers[address]
-			@handlers[address] = []
-		@handlers[address].push _.bind(handler, context)
+		# Initialize subscriptions container for this address.
+		unless @_subscriptions[address]
+			@_subscriptions[address] = []
+		# Create subscription.
+		sub = new Subscription address, handler, context, @
+		# Add to list.
+		@_subscriptions[address].push sub
+		# Return subscription.
+		return sub
 
-		return @
+	# Unsubscribes a handler.
+	unsubscribe: (address, handler) ->
+		sub = address
+		# Search by subscription.
+		if sub instanceof Subscription
+			# Check address.
+			address = sub.address
+			return unless @_subscriptions[address]
+			for s, i in @_subscriptions[address]
+				if s is sub
+					@_subscriptions[address].splice i
+		# Otherwise search by address and handler.
+		else
+			# Check for address.
+			return unless @_subscriptions[address]
+			for s, i in @_subscriptions[address]
+				if s.address is address and s.handler is handler
+					@_subscriptions[address].splice i
+		return
 
 	# Publishes an event to an address.
 	publish: (address, data, reply) ->
@@ -41,12 +64,10 @@ EventBus = class C.EventBus
 
 	# Publishes a message to an address.
 	_publishAddress: (address, msg) ->
-		# Check if we have handlers for this address.
-		return unless @handlers[address]
-		# Send to handlers.
-		for handler in @handlers[address]
-			do (handler) ->
-				_.defer ->
-					handler(msg)
-				return
+		# Check if we have subscriptions at all for this address.
+		return unless @_subscriptions[address]
+		# Send message to all subscriptions.
+		for subscription in @_subscriptions[address]
+			subscription.trigger msg
+		return
 

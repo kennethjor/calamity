@@ -2,6 +2,8 @@
 Calamity is a JavaScript event bus implementation designed for use within both server and client applications.
 The library is still in its early stages of development.
 
+The goal of this project is to build a simple EventBus library for event-driven architectures.
+
 # Usage
 
 [Download latest stable.][download]
