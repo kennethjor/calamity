@@ -8,6 +8,7 @@ var C = {};
 
 // This wrapper is brutally stolen from Underscore 1.4.2.
 // https://raw.github.com/documentcloud/underscore/master/underscore.js
+var root = this
 if (typeof exports !== 'undefined') {
 	if (typeof module !== 'undefined' && module.exports) {
 		exports = module.exports = C;

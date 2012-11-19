@@ -1,3 +1,6 @@
+# 0.2.1 (development)
+* *Fix:* Browser initialisation.
+
 # 0.2.0 (2012-11-14)
 
 * *Feature:* Implemented `ProxyMixin` for easy global event bus handling.
