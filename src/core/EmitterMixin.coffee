@@ -5,12 +5,14 @@ EmitterMixin = class C.EmitterMixin
 	# ## `on()`
 	# Register a handler to an address.
 	on: (address, handler, context) ->
+		context or= @
 		return getEmitterBus(@).subscribe(address, handler, context)
 
 	# ## `off()`
 	# Unregisters a handler from an address.
 	off: (address, handler, context) ->
 		return unless hasEmitterBus(@)
+		context or= @
 		return getEmitterBus(@).unsubscribe(address, handler, context)
 
 	# ## `_trigger()`

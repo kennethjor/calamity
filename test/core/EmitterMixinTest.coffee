@@ -92,3 +92,17 @@ exports.tests =
 				test.ok emitter._calamity.emitter.bus instanceof calamity.EventBus
 				test.done()
 		]
+
+	# Test correct default context is set.
+	"default context": (test) ->
+		test.expect 2
+		# Setup
+		emitter = new TestEmitter()
+		sub = emitter.on "address", () ->
+			# Test local context
+			test.strictEqual emitter, @
+			test.done()
+		# Test subscription context
+		test.strictEqual emitter, sub.context
+		emitter.trigger "address"
+
