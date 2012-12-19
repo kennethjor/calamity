@@ -7,7 +7,7 @@ module.exports = function(grunt) {
 			banner: "/*! <%= pkg.fullname %> <%= pkg.version %> - MIT license */",
 			wrapperVersion: "C.VERSION = \"<%= pkg.version %>\";",
 			wrapperStart: "(function(){",
-			wrapperEnd: "})();"
+			wrapperEnd: "}).call(this);"
 		},
 
 		coffee: {

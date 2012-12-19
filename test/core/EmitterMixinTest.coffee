@@ -41,7 +41,7 @@ exports.tests =
 		test.expect 3
 		test.ok _.isFunction emitter1.on
 		test.ok _.isFunction emitter1.off
-		test.ok _.isFunction emitter1._trigger
+		test.ok _.isFunction emitter1.trigger
 		test.done()
 
 	# General test of the emitter.
@@ -55,8 +55,8 @@ exports.tests =
 		async.series [
 			(callback) ->
 				# Trigger both emitters.
-				emitter1._trigger "address"
-				emitter2._trigger "address"
+				emitter1.trigger "address"
+				emitter2.trigger "address"
 				_.delay callback, 10
 			(callback) ->
 				# Test correct execution count.
@@ -78,7 +78,7 @@ exports.tests =
 		async.series [
 			(callback) ->
 				# A trigger with no listeners should not create the bus.
-				emitter._trigger "address"
+				emitter.trigger "address"
 				_.delay callback, 10
 			(callback) ->
 				test.ok _.isUndefined emitter._calamity

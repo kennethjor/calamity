@@ -5,12 +5,12 @@
 ProxyMixin = class C.ProxyMixin
 	# ## `_subscribe()`
 	# Register a handler to an address with.
-	_subscribe: (address, handler) ->
+	subscribe: (address, handler) ->
 		return @_calamity.proxy.bus.subscribe address, handler, @
 
 	# ## `_publish()`
 	# Publishes an event to an address.
-	_publish: (address, data, reply) ->
+	publish: (address, data, reply) ->
 		return @_calamity.proxy.bus.publish address, data, reply
 
 # We automatically construct a default global bus when needed.

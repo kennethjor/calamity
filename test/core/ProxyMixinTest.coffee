@@ -22,8 +22,8 @@ exports.tests =
 	# Tests whether the construction and mixin worked correctly.
 	"construction": (test) ->
 		test.ok default1 instanceof TestProxyDefault
-		test.equal "function", typeof default1._publish
-		test.equal "function", typeof default1._subscribe
+		test.equal "function", typeof default1.publish
+		test.equal "function", typeof default1.subscribe
 		test.ok default1._calamity.proxy.bus instanceof calamity.EventBus
 		test.ok specific1._calamity.proxy.bus instanceof calamity.EventBus
 		test.done()
@@ -40,10 +40,10 @@ exports.tests =
 	"pubsub": (test) ->
 		test.expect 2
 		# Subscribe on object 1, publish on object 2. They should use the same event bus.
-		default1._subscribe "address", (msg) ->
+		default1.subscribe "address", (msg) ->
 			# Check this context and data.
 			test.strictEqual default1, @
 			test.equal "data", msg.data
 			test.done()
-		default2._publish "address", "data"
+		default2.publish "address", "data"
 

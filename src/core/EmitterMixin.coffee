@@ -15,7 +15,7 @@ EmitterMixin = class C.EmitterMixin
 
 	# ## `_trigger()`
 	# Publishes an event to an address.
-	_trigger: (address, data, reply) ->
+	trigger: (address, data, reply) ->
 		return unless hasEmitterBus(@)
 		return getEmitterBus(@).publish(address, data, reply)
 
