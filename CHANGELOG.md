@@ -1,5 +1,7 @@
-# 0.2.1 (development)
+# 0.3.0 (development)
+* *API change:* Removed initial underscore from `_trigger()`, `_subscribe()`, and `_publish()` on `ProxyMixin` and `EmitterMixin`. It makes assumptions about code style.
 * *Fix:* Browser initialisation.
+* *Fix:* Bug where `EmitterMixin` would not correctly set default context.
 
 # 0.2.0 (2012-11-14)
 
