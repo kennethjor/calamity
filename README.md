@@ -23,10 +23,10 @@ This example CoffeeScript code will create an object which is aware of a global 
 
     Calamity = require "calamity"
     class Foo
-    	Calamity.proxy @.prototype
+    	Calamity.proxy @prototype
 
     	constructor: () ->
-    		@._subscribe "address", @.handler
+    		@subscribe "address", @.handler
 
     	handler: (msg) ->
     		# Proxy automatically handles this.
@@ -36,7 +36,7 @@ Now, whenever any object publishes a message to the `foo:bar` address, handler w
 
 ## Local event bus with `emitter()`
 
-    Calamity.emitter @.prototype
+    Calamity.emitter @prototype
 
 # Compiling
 To compile Calamity yourself, first check out the repo
