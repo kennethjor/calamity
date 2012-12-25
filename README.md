@@ -47,6 +47,8 @@ Install required tools and libraries
 
     ./setup.sh
 
+Install [PhantomJS][phantomjs].
+
 Run a full compile
 
     grunt
@@ -76,3 +78,4 @@ CalamityJS is licensed and freely distributed under the [MIT License][mit]
 [downloadmin]: https://bitbucket.org/kennethjor/calamityjs/downloads/calamity-min.js
 [mit]: https://bitbucket.org/kennethjor/calamityjs/raw/default/LICENSE "MIT License"
 [semver]: http://semver.org/ "Semantic Versioning"
+[phantomjs]: http://phantomjs.org/ "PhantomJS"
