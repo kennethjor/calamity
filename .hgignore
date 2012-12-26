@@ -6,4 +6,5 @@ syntas: regexp
 ^dist/
 calamity\.js
 calamity-min\.js
+_SpecRunner\.html
 

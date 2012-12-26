@@ -34,33 +34,23 @@ module.exports = function(grunt) {
 				files: {
 					"build/test/core/*.js": ["test/core/*.coffee"]
 				}
-			},
-			// Compile the jasmine specs.
-			spec: {
-				files: {
-					"build/spec/*.js": ["spec/**/*.coffee"]
-				}
 			}
 		},
 
-		// Build Jasmine specs for the browser
+		// Build Jasmine core specs for the browser
 		browserify: {
 			"build/spec.js": {
-//				requires: ['traverse'],
-//				aliases: ['jquery:jquery-browserify'],
-				entries: ["spec/**/*.coffee"]
+				entries: ["spec/core/*.coffee"]
 			}
 		},
 
 		// Execute Jasmine specs
 		jasmine : {
-//			src : "calamity.js",
 			specs : "build/spec.js",
-			//helpers : "specs/helpers/*.js",
-			timeout : 10000,
+			timeout : 500,
 			verbose: true,
 			junit : {
-				output : "build/junit/"
+				output : "build/spec/"
 			},
 			phantomjs : {
 				"ignore-ssl-errors" : true
@@ -122,8 +112,9 @@ module.exports = function(grunt) {
 	// Core compile.
 	grunt.registerTask("compile-core", "coffee:core_first concat:core_coffee coffee:core_second");
 	grunt.registerTask("dist-core", "concat:core_dist min:core");
-	grunt.registerTask("test-core", "coffee:core_test test");
-	grunt.registerTask("build-core", "compile-core dist-core test-core");
+	grunt.registerTask("test-core", "coffee:core_test test"); // will go away once ported to jasmine
+	grunt.registerTask("spec-phantomjs", "browserify jasmine");
+	grunt.registerTask("build-core", "compile-core dist-core test-core spec-phantomjs");
 	// Default task.
 	grunt.registerTask("default", "build-core");
 

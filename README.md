@@ -38,16 +38,16 @@ Now, whenever any object publishes a message to the `foo:bar` address, handler w
 
     Calamity.emitter @prototype
 
-# Compiling
+# Building
 To compile Calamity yourself, first check out the repo
 
     hg clone ssh://hg@bitbucket.org/kennethjor/calamityjs
 
-Install required tools and libraries
+Install required tools and libraries:
 
-    ./setup.sh
-
-Install [PhantomJS][phantomjs].
+* [PhantomJS][phantomjs]
+* `sudo npm install -g grunt coffee-script`
+* `npm install`
 
 Run a full compile
 
@@ -67,9 +67,6 @@ Then you can generate the docs
 
     ./docs.sh
 
-# Versioning
-CalamityJS follows the [semantic versioning][semver] specification.
-
 # License
 CalamityJS is licensed and freely distributed under the [MIT License][mit]
 
@@ -77,5 +74,4 @@ CalamityJS is licensed and freely distributed under the [MIT License][mit]
 [downloadfull]: https://bitbucket.org/kennethjor/calamityjs/downloads/calamity.js
 [downloadmin]: https://bitbucket.org/kennethjor/calamityjs/downloads/calamity-min.js
 [mit]: https://bitbucket.org/kennethjor/calamityjs/raw/default/LICENSE "MIT License"
-[semver]: http://semver.org/ "Semantic Versioning"
 [phantomjs]: http://phantomjs.org/ "PhantomJS"
