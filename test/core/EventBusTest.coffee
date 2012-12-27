@@ -25,49 +25,6 @@ exports.tests =
 		sub2 = bus.subscribe "address2", handler2
 		done()
 
-	# Tests message creation.
-	"create message": (test) ->
-		test.expect 4
-		reply = (msg) ->
-			return
-		# Useful creation.
-		msg = bus._createMessage "address", "data", reply
-		test.equals "address", msg.address
-		test.equals "data", msg.data
-		# @todo Reply is testing the internals of EventMessage, not cool, but easier that executing the reply.
-		test.strictEqual reply, msg._replyHandler
-		# Noop creation.
-		msg2 = bus._createMessage msg
-		test.strictEqual msg, msg2
-
-		test.done()
-
-	# Simple pub/sub tests.
-	"simple pubsub": (test) ->
-		test.expect 4
-		async.series [
-			# Publsh to the first address.
-			(callback) ->
-				next = callback
-				bus.publish "address1"
-			# Check callback counts.
-			(callback) ->
-				test.equals(n1, 1)
-				test.equals(n2, 0)
-				callback()
-			# Publish to second address.
-			(callback) ->
-				next = callback
-				bus.publish "address2"
-			# Check callback counts.
-			(callback) ->
-				test.equals(n1, 1)
-				test.equals(n2, 1)
-				callback()
-
-				test.done()
-		]
-
 	# Tests wildcard subscriptions.
 	"wildcard subscription": (test) ->
 		test.expect 1

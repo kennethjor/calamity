@@ -46,6 +46,11 @@ module.exports = function(grunt) {
 
 		// Execute Jasmine specs
 		jasmine : {
+			src: [
+				"node_modules/sinon/lib/sinon.js",
+				"node_modules/sinon/lib/sinon/spy.js",
+				"lib/jasmine-sinon.js"
+			],
 			specs : "build/spec.js",
 			timeout : 500,
 			verbose: true,
