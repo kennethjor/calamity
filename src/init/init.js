@@ -14,6 +14,11 @@ if (typeof exports !== 'undefined') {
 		exports = module.exports = C;
 	}
 	exports.C = C;
-} else {
+}
+else if (typeof define === 'function' && define.amd) {
+    // AMD. Register as an anonymous module.
+    define(['calamity'], C);
+}
+else {
 	root['Calamity'] = C;
 }
