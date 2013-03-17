@@ -1,4 +1,4 @@
-# CalamityJS
+# Calamity
 Calamity is an event bus library for use in event-driven architectures.
 With Calamity you can easily attach global and local event functionality to your classes and prototypes.
 
@@ -41,7 +41,7 @@ Now, whenever any object publishes a message to the `foo:bar` address, handler w
 # Building
 To compile Calamity yourself, first check out the repo
 
-    hg clone ssh://hg@bitbucket.org/kennethjor/calamityjs
+    hg clone ssh://hg@bitbucket.org/kennethjor/calamity
 
 Install required tools and libraries:
 
@@ -68,10 +68,10 @@ Then you can generate the docs
     ./docs.sh
 
 # License
-CalamityJS is licensed and freely distributed under the [MIT License][mit]
+Calamity is licensed and freely distributed under the [MIT License][mit]
 
-[download]: https://bitbucket.org/kennethjor/calamityjs/downloads "Download from bitbucket.org"
-[downloadfull]: https://bitbucket.org/kennethjor/calamityjs/downloads/calamity.js
-[downloadmin]: https://bitbucket.org/kennethjor/calamityjs/downloads/calamity-min.js
-[mit]: https://bitbucket.org/kennethjor/calamityjs/raw/default/LICENSE "MIT License"
+[download]: https://bitbucket.org/kennethjor/calamity/downloads "Download from bitbucket.org"
+[downloadfull]: https://bitbucket.org/kennethjor/calamity/downloads/calamity.js
+[downloadmin]: https://bitbucket.org/kennethjor/calamity/downloads/calamity-min.js
+[mit]: https://bitbucket.org/kennethjor/calamity/raw/default/LICENSE "MIT License"
 [phantomjs]: http://phantomjs.org/ "PhantomJS"
