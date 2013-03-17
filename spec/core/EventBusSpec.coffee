@@ -1,4 +1,4 @@
-C = require "../../../calamity.js"
+C = require "../../calamity.js"
 
 describe "EventBus", ->
 	bus = null
