@@ -1,4 +1,4 @@
-calamity = require "../../../calamity.js"
+calamity = require "../../../calamity"
 async = require "async"
 
 # Test class with the emitter mixin applied.

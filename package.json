@@ -1,7 +1,7 @@
 {
 	"fullname": "Calamity",
 	"name": "calamity",
-	"version": "0.3.0",
+	"version": "0.3.1",
 	"description": "An event bus library for event-driven applications.",
 	"keywords": ["events", "pubsub"],
 	"homepage": "https://bitbucket.org/kennethjor/calamity",
@@ -19,17 +19,18 @@
 		}
 	],
 	"dependencies": {
-		"underscore": "~ 1.4.3"
+		"underscore": "~ 1.4.4"
 	},
 	"devDependencies": {
-		"grunt-contrib-coffee": "~ 0.3.2",
+		"grunt": "~ 0.4",
+		"grunt-contrib-concat": "~ 0.1.3",
+		"grunt-contrib-coffee": "~ 0.6.0",
+		"grunt-contrib-uglify": "~ 0.2.0",
+		"grunt-contrib-nodeunit": "~ 0.1.2",
+		"grunt-contrib-watch": "~ 0.3.1",
 		"async": "~ 0.1.22",
-		"grunt-browserify": "~ 0.1.2",
-		"grunt-jasmine-runner": "~ 0.6.0",
-		"sinon": "~ 1.5.2"
-	},
-	"scripts": {
-		"prepublish": "grunt && ./docs.sh"
+		"jessie": "~ 0.4.2",
+		"sinon": "~ 1.6.0"
 	},
 	"files": [
 		"calamity.js",
