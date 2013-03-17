@@ -30,7 +30,8 @@
 		"grunt-contrib-watch": "~ 0.3.1",
 		"async": "~ 0.1.22",
 		"jessie": "~ 0.4.2",
-		"sinon": "~ 1.6.0"
+		"sinon": "~ 1.6.0",
+		"doxx": "~ 0.5.9"
 	},
 	"files": [
 		"calamity.js",
