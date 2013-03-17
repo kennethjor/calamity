@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.3.1 (dev)
+## 0.3.1 (2013-03-19)
 * *Fix:* Added AMD load header. [pull/1](https://bitbucket.org/kennethjor/calamity/pull-request/1)
 
 ## 0.3.0 (2013-01-29)
