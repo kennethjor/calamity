@@ -76,6 +76,7 @@ module.exports = function(grunt) {
 		}
 	});
 
+	// Jessie Jasmine runner.
 	grunt.registerTask("jessie", "Runs Jasmine with Jessie.", function() {
 		done = this.async();
 		command = "./node_modules/jessie/bin/jessie build/spec"
@@ -96,19 +97,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks("grunt-contrib-concat");
 	grunt.loadNpmTasks("grunt-contrib-uglify");
 	grunt.loadNpmTasks("grunt-contrib-nodeunit");
-//	grunt.loadNpmTasks("grunt-jasmine-runner");
-//	grunt.loadNpmTasks("grunt-jasmine-node");
-//	grunt.loadNpmTasks("grunt-browserify");
 
-	grunt.registerTask("default", ["coffee", "concat", "uglify", "nodeunit", "jessie"]);
-
-	// Core compile.
-//	grunt.registerTask("compile-core", "coffee:core_first concat:core_coffee coffee:core_second");
-//	grunt.registerTask("dist-core", "concat:core_dist min:core");
-//	grunt.registerTask("test-core", "coffee:core_test test"); // will go away once ported to jasmine
-//	grunt.registerTask("spec-phantomjs", "browserify jasmine");
-//	grunt.registerTask("build-core", "compile-core dist-core test-core spec-phantomjs");
 	// Default task.
-//	grunt.registerTask("default", "build-core");
-
+	grunt.registerTask("default", ["coffee", "concat", "uglify", "nodeunit", "jessie"]);
 };
