@@ -14,6 +14,7 @@ The two primary methods in Calamity are `Calamity.proxy()` and `Calamity.emitter
 ## Global event bus with `proxy()`
 This example CoffeeScript code will create an object which is aware of a global event bus.
 
+    :::coffeescript
     Calamity = require "calamity"
     class Foo
     	Calamity.proxy @prototype
@@ -29,6 +30,7 @@ Now, whenever any object publishes a message to the `foo:bar` address, handler w
 
 ## Local event bus with `emitter()`
 
+    :::coffeescript
     Calamity = require "calamity"
     class Foo
     	Calamity.emitter @prototype
