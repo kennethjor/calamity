@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.3.1 (2013-03-19)
+* *Fix:* Added AMD load header. [pull/1](https://bitbucket.org/kennethjor/calamity/pull-request/1)
+
 ## 0.3.0 (2013-01-29)
 * *API change:* Removed initial underscore from `_trigger()`, `_subscribe()`, and `_publish()` on `ProxyMixin` and `EmitterMixin`. It makes assumptions about code style.
 * *Fix:* Browser initialisation.

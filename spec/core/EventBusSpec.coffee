@@ -1,4 +1,5 @@
-C = require "../../../calamity.js"
+C = require "../../../calamity"
+sinon = require "sinon"
 
 describe "EventBus", ->
 	bus = null
@@ -37,16 +38,16 @@ describe "EventBus", ->
 			bus.publish "address/1"
 		waits 10
 		runs ->
-			expect(handler11).toHaveBeenCalledOnce()
-			expect(handler12).toHaveBeenCalledOnce()
-			expect(handler2).not.toHaveBeenCalled()
+			expect(handler11.callCount).toBe 1
+			expect(handler12.callCount).toBe 1
+			expect(handler2.called).toBe false
 
 			bus.publish "address/2"
 		waits 10
 		runs ->
-			expect(handler11).toHaveBeenCalledOnce()
-			expect(handler12).toHaveBeenCalledOnce()
-			expect(handler2).toHaveBeenCalledOnce()
+			expect(handler11.callCount).toBe 1
+			expect(handler12.callCount).toBe 1
+			expect(handler2.called).toBe true
 
 	it "should send correct message to handlers", ->
 		msg = null

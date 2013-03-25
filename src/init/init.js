@@ -4,16 +4,21 @@ if (typeof _ === "undefined" && typeof require === "function") {
 }
 
 // Init Calamity object.
-var C = {};
+var C = {version: "<%= pkg.version %>"};
 
-// This wrapper is brutally stolen from Underscore 1.4.2.
-// https://raw.github.com/documentcloud/underscore/master/underscore.js
 var root = this
-if (typeof exports !== 'undefined') {
-	if (typeof module !== 'undefined' && module.exports) {
+// CommonJS
+if (typeof exports !== "undefined") {
+	if (typeof module !== "undefined" && module.exports) {
 		exports = module.exports = C;
 	}
 	exports.C = C;
-} else {
+}
+// AMD
+else if (typeof define === "function" && define.amd) {
+    define(['calamity'], C);
+}
+// Browser
+else {
 	root['Calamity'] = C;
 }

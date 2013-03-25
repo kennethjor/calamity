@@ -1,14 +1,11 @@
-# CalamityJS
+# Calamity
 Calamity is an event bus library for use in event-driven architectures.
-With Calamity you can easily attach global and local event functionality to your classes and prototypes.
-It is [hosted on BitBucket][bitbucket].
+Using Calamity you can easily drive your application through a global event bus, or simply add event functionality to objects.
 
 # Installation
 Install via `npm`:
 
     npm install calamity
-
-Or [download directly][download] from bitbucket.
 
 # Usage
 
@@ -17,56 +14,38 @@ The two primary methods in Calamity are `Calamity.proxy()` and `Calamity.emitter
 ## Global event bus with `proxy()`
 This example CoffeeScript code will create an object which is aware of a global event bus.
 
+    :::coffeescript
     Calamity = require "calamity"
     class Foo
     	Calamity.proxy @prototype
 
     	constructor: () ->
-    		@subscribe "address", @.handler
+    		@subscribe "address", @handler
 
     	handler: (msg) ->
-    		# Proxy automatically handles this.
+    		# Proxy automatically handles binding to this.
     		@data = msg.data
 
-Now, whenever any object publishes a message to the `foo:bar` address, handler will be called and you can react to it.
+Now, whenever any object publishes a message to the `foo:bar` address, handler will be called and you can react on it.
 
 ## Local event bus with `emitter()`
 
-    Calamity.emitter @prototype
+    :::coffeescript
+    Calamity = require "calamity"
+    class Foo
+    	Calamity.emitter @prototype
 
-# Compiling
-To compile Calamity yourself, first check out the repo
+    	constructor: () ->
+    		@on "address", @handler
 
-    hg clone ssh://hg@bitbucket.org/kennethjor/calamityjs
+    	handler: (msg) ->
+    		# Proxy automatically handles binding to this.
+    		@data = msg.data
 
-Install required tools and libraries:
-
-* [PhantomJS][phantomjs]
-* `sudo npm install -g grunt coffee-script`
-* `npm install`
-
-Run a full compile
-
-    grunt
-
-When developing, executing watch immediately after the compile is very handy
-
-    grunt default watch
-
-## Documentation
-To build the documentation you need to install Pygments and docco
-
-    sudo easy_install Pygments
-    sudo npm install -g docco
-
-Then you can generate the docs
-
-    ./docs.sh
+This code is very similar to the global events, except this will create an event bus local to a particular instance.
+This allows you to create localised events using `on(address, handler)` and `trigger(address, data)`.
 
 # License
-CalamityJS is licensed and freely distributed under the [MIT License][mit]
+Calamity is licensed and freely distributed under the [MIT License][mit]
 
-[bitbucket]: https://bitbucket.org/kennethjor/calamityjs
-[download]: https://bitbucket.org/kennethjor/calamityjs/downloads "Download from bitbucket.org"
 [mit]: https://bitbucket.org/kennethjor/calamityjs/raw/default/LICENSE "MIT License"
-[phantomjs]: http://phantomjs.org/ "PhantomJS"
