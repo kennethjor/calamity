@@ -19,7 +19,7 @@
 		}
 	],
 	"dependencies": {
-		"underscore": "~ 1.4.3"
+        "underscore": "~ 1.4.3"
 	},
 	"devDependencies": {
 		"grunt-contrib-coffee": "~ 0.3.2",
