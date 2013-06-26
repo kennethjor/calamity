@@ -19,7 +19,7 @@
 		}
 	],
 	"dependencies": {
-		"underscore": "~ 1.4.4"
+		"underscore": ">= 1.4.4"
 	},
 	"devDependencies": {
 		"grunt": "~ 0.4",
