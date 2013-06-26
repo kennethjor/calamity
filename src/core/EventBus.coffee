@@ -42,7 +42,7 @@ EventBus = class C.EventBus
 		return
 
 	# ## `publish()`
-	# Publishes an event to an address.
+	# Publishes an event to a all subscribers on an address.
 	publish: (address, data, reply) ->
 		msg = @_createMessage address, data, reply
 		address = msg.address
@@ -57,6 +57,21 @@ EventBus = class C.EventBus
 
 		return @
 
+	# ## `send()`
+	# Sends an event to a single subscribed address.
+	# Sends are sent to wildcard addresses, ever.
+	send: (address, data, reply) ->
+		msg = @_createMessage address, data, reply
+		address = msg.address
+		# Check if message has already been processed by this bus.
+		return @ if msg.sawBus @
+		# Register this bus on the event
+		msg.addBus @
+		# Publish to target address.
+		@_sendAddress address, msg
+
+		return @
+
 	# Utility function for creating messages.
 	_createMessage: (address, data, reply) ->
 		# Construct new EventMessage is necesarry.
@@ -65,7 +80,6 @@ EventBus = class C.EventBus
 			msg = new EventMessage address, data, reply
 		return msg
 
-
 	# Publishes a message to an address.
 	_publishAddress: (address, msg) ->
 		# Check if we have subscriptions at all for this address.
@@ -73,5 +87,16 @@ EventBus = class C.EventBus
 		# Send message to all subscriptions.
 		for subscription in @_subscriptions[address]
 			subscription.trigger msg
+		return
+
+	# Sends a message to an address.
+	_sendAddress: (address, msg) ->
+		# Check if we have subscriptions at all for this address.
+		return unless @_subscriptions[address]
+		# Send message to a single random subscription.
+		subs = @_subscriptions[address]
+		len = subs.length
+		i = Math.floor(Math.random()*len)
+		subs[i].trigger msg
 		return
 

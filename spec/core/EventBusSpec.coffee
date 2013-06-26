@@ -20,13 +20,13 @@ describe "EventBus", ->
 		expect(msg.data).toBe("data")
 		expect(msg._replyHandler).toBe(reply)
 
-	it "should create multiple messages", () ->
+	it "should create multiple messages", ->
 		bus = new C.EventBus()
 		msg1 = bus._createMessage()
 		msg2 = bus._createMessage()
 		expect(msg1).not.toBe(msg2)
 
-	it "should route messages to correct handlers", () ->
+	it "should route messages to correct handlers", ->
 		handler11 = sinon.spy()
 		handler12 = sinon.spy()
 		handler2 = sinon.spy()
@@ -36,14 +36,14 @@ describe "EventBus", ->
 
 		runs ->
 			bus.publish "address/1"
-		waits 10
+		waits 10 # @todo use waitsFor
 		runs ->
 			expect(handler11.callCount).toBe 1
 			expect(handler12.callCount).toBe 1
 			expect(handler2.called).toBe false
 
 			bus.publish "address/2"
-		waits 10
+		waits 10 # @todo use waitsFor
 		runs ->
 			expect(handler11.callCount).toBe 1
 			expect(handler12.callCount).toBe 1
@@ -56,8 +56,25 @@ describe "EventBus", ->
 		bus.subscribe "address", handler
 		runs ->
 			bus.publish "address", "data"
-		waits 10
+		waits 10 # @todo use waitsFor
 		runs ->
 			expect(msg.address).toBe("address")
 			expect(msg.data).toBe("data")
 
+	it "should send commands to a single handler only", ->
+		handler1 = sinon.spy()
+		handler2 = sinon.spy()
+		bus.subscribe "address", handler1
+		bus.subscribe "address", handler2
+
+		runs ->
+			bus.send "address"
+		waitsFor (-> handler1.called or handler2.called), "Neither handler called", 100
+		runs ->
+			if handler1.called
+				expect(handler1.callCount).toBe 1
+				expect(handler2.callCount).toBe 0
+			if handler2.called
+				expect(handler1.callCount).toBe 0
+				expect(handler2.callCount).toBe 1
+			expect(handler1.callCount + handler2.callCount).toBe 1
