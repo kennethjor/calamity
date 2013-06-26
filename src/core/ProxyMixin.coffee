@@ -13,16 +13,23 @@ ProxyMixin = class C.ProxyMixin
 	publish: (address, data, reply) ->
 		return @_calamity.proxy.bus.publish address, data, reply
 
+	# ## `send()`
+	# Sends an event to a single handler on an address.
+	send: (address, data, reply) ->
+		return @_calamity.proxy.bus.send address, data, reply
+
 # We automatically construct a default global bus when needed.
 PROXY_GLOBAL_BUS = null
+C.global = ->
+	PROXY_GLOBAL_BUS or= new EventBus()
+	return PROXY_GLOBAL_BUS
 
 # ## `Calamity.proxy()`
 # Adds proxy functionality.
 C.proxy = (obj, bus) ->
 	# Prepare bus.
 	unless bus instanceof EventBus
-		PROXY_GLOBAL_BUS or= new EventBus()
-		bus = PROXY_GLOBAL_BUS
+		bus = C.global()
 	# Attach bus.
 	c = (obj._calamity or= {})
 	c.proxy =

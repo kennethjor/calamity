@@ -63,7 +63,7 @@ module.exports = function(grunt) {
 		},
 
 		nodeunit: {
-			all: ["build/test/**/*.js"]
+			all: ["build/test/**/*Test.js"]
 		},
 
 		watch: {

@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.4.0 (2013-06-26)
+* *Feature:* Added support for commands via `send()`.
+* *Feature:* Added support for basic event bridges via `bridge()`.
+
 ## 0.3.1 (2013-03-19)
 * *Fix:* Added AMD load header. [pull/1](https://bitbucket.org/kennethjor/calamity/pull-request/1)
 

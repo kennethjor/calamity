@@ -6,6 +6,8 @@ EventBus = class C.EventBus
 		@id = util.genId()
 		# Registered subscriptions container.
 		@_subscriptions = {}
+		# Registered bridges container.
+		@_bridges = []
 
 	# ## `subscribe()`
 	# Register a handler to an address.
@@ -17,6 +19,8 @@ EventBus = class C.EventBus
 		sub = new Subscription address, handler, context, @
 		# Add to list.
 		@_subscriptions[address].push sub
+		# Send to bridges.
+		@_bridgeProp "subscribe", subscription: sub
 		# Return subscription.
 		return sub
 
@@ -38,7 +42,10 @@ EventBus = class C.EventBus
 			return unless @_subscriptions[address]
 			for s, i in @_subscriptions[address]
 				if s.address is address and s.handler is handler
+					sub = s
 					@_subscriptions[address].splice i
+		# Send to bridges.
+		@_bridgeProp "unsubscribe", subscription: sub
 		return
 
 	# ## `publish()`
@@ -54,6 +61,8 @@ EventBus = class C.EventBus
 		@_publishAddress address, msg
 		# Publish to wildcard address.
 		@_publishAddress "*", msg
+		# Send to bridges.
+		@_bridgeProp "publish", message: msg
 
 		return @
 
@@ -69,7 +78,17 @@ EventBus = class C.EventBus
 		msg.addBus @
 		# Publish to target address.
 		@_sendAddress address, msg
+		# Send to bridges.
+		@_bridgeProp "send", message: msg
 
+		return @
+
+	# ## `bridge()`
+	# Attached a bridge object to this bus.
+	# Briges will receive information about everything that's going on.
+	bridge: (bridge) ->
+		throw new Error "Briges must extend Calamity.EventBridge" unless bridge instanceof EventBridge
+		@_bridges.push bridge unless _.contains @_bridges, bridge
 		return @
 
 	# Utility function for creating messages.
@@ -100,3 +119,11 @@ EventBus = class C.EventBus
 		subs[i].trigger msg
 		return
 
+	# Propagates to all bridges.
+	_bridgeProp: (type, data) ->
+		return unless @_bridges.length > 0
+		address = "bus.#{type}"
+		data.bus = @
+		for b in @_bridges
+			b.trigger address, data
+		return
