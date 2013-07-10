@@ -10,7 +10,7 @@ Subscription = class C.Subscription
 	# ## `unsubscribe()`
 	# Shorthand for unsubscribing.
 	unsubscribe: ->
-		return unless @_active
+		return unless @active
 		@bus.unsubscribe @
 		@active = false
 		return @

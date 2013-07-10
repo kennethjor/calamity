@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.4.1 (dev)
+* *Fix:* `Subscription`'s `unsubscribe()` contained a typo, causing it to never work.
+
 ## 0.4.0 (2013-06-26)
 * *Feature:* Added support for commands via `send()`.
 * *Feature:* Added support for basic event bridges via `bridge()`.
