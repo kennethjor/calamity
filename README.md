@@ -2,7 +2,7 @@
 Calamity is an event bus library for use in event-driven architectures.
 Using Calamity you can easily drive your application through a global event bus, or simply add event functionality to objects.
 
-# Installing
+# Installation
 Install via `npm`:
 
     npm install calamity
@@ -48,5 +48,4 @@ This allows you to create localised events using `on(address, handler)` and `tri
 # License
 Calamity is licensed and freely distributed under the [MIT License][mit]
 
-[downloadmin]: https://bitbucket.org/kennethjor/calamity/downloads/calamity-min.js
 [mit]: https://bitbucket.org/kennethjor/calamity/raw/default/LICENSE "MIT License"
