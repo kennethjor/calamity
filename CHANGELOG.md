@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.4.1 (dev)
+## 0.4.1 (2013-07-10)
 * *Fix:* `Subscription`'s `unsubscribe()` contained a typo, causing it to never work.
 
 ## 0.4.0 (2013-06-26)
