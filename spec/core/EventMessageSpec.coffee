@@ -33,11 +33,27 @@ describe "EventMessage", ->
 			runs ->
 				expect(reply.callCount).toBe 1
 
-		it "should be provided with a new EventMessage", ->
+		it "should be provided with a successful EventMessage by default", ->
 			message.reply foo:"foo"
 			waitsFor (-> reply.called), "Reply never called", 100
 			runs ->
 				replyMsg = reply.args[0][0]
-				expect(typeof replyMsg).toBe "object"
 				expect(replyMsg instanceof EventMessage).toBe true
 				expect(replyMsg.data.foo).toBe "foo"
+				expect(replyMsg.status).toBe "ok"
+				expect(replyMsg.error).toBe null
+				expect(replyMsg.isSuccess()).toBe true
+				expect(replyMsg.isError()).toBe false
+
+		it "should handle error replies", ->
+			error = new Error "Foo"
+			message.replyError error, foo:"foo"
+			waitsFor (-> reply.called), "Reply never called", 100
+			runs ->
+				replyMsg = reply.args[0][0]
+				expect(replyMsg instanceof EventMessage).toBe true
+				expect(replyMsg.data.foo).toBe "foo"
+				expect(replyMsg.status).toBe "error"
+				expect(replyMsg.error).toBe error
+				expect(replyMsg.isSuccess()).toBe false
+				expect(replyMsg.isError()).toBe true
