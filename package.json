@@ -1,7 +1,7 @@
 {
 	"fullname": "Calamity",
 	"name": "calamity",
-	"version": "0.4.1",
+	"version": "0.5.0-dev",
 	"description": "An event bus library for event-driven applications.",
 	"keywords": ["events", "pubsub"],
 	"homepage": "https://bitbucket.org/kennethjor/calamity",
