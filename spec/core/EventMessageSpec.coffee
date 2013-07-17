@@ -118,3 +118,27 @@ describe "EventMessage", ->
 				call = reply.getCall 0
 				expect(call.args[0] instanceof EventMessage).toBe true
 				expect(call.args[0].data.foo).toBe "foo"
+
+	describe "variables", ->
+		data =
+			foo: "a"
+			bar: "b"
+		msg = null
+		beforeEach ->
+			msg = new EventMessage "address", data
+
+		it "should return optional values", ->
+			expect(msg.getOptional "foo").toBe "a"
+			expect(msg.getOptional "bar").toBe "b"
+			expect(msg.getOptional "bar", "default").toBe "b"
+			expect(msg.getOptional "doesntexist").toBe undefined
+			expect(msg.getOptional "doesntexist", "default").toBe "default"
+
+		it "should return required values", ->
+			expect(msg.getRequired "foo").toBe "a"
+			expect(msg.getRequired "bar").toBe "b"
+
+		it "should throw errors on missing required values without a reply handler", ->
+			check = ->
+				msg.getRequired "doesntexist"
+			expect(check).toThrow("Variable \"doesntexist\" not found on message with address \"address\"")

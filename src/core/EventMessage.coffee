@@ -50,6 +50,22 @@ EventMessage = class C.EventMessage
 	isError: ->
 		return @status is "error"
 
+	# Returns a parameter message data.
+	# If the parameter is not present, `def` is returned.
+	getOptional: (param, def) ->
+		val = @data[param]
+		if typeof val is "undefined"
+			return def
+		return val
+
+	# Returns a parameter message data.
+	# If the parameter is not present, an error is thrown.
+	getRequired: (param) ->
+		val = @data[param]
+		if typeof val is "undefined"
+			throw new Error "Variable \"#{param}\" not found on message with address \"#{@address}\""
+		return val
+
 	# ## `addBus()`
 	# Adds a bus to the internal list.
 	addBus: (bus) ->
@@ -80,7 +96,7 @@ EventMessage = class C.EventMessage
 	# The message must have been serialized using `EventMessage`'s own `toJSON()` method, otherwise weird things could happen.
 	@fromJSON = (json) ->
 		throw new Error "JSON must be an object" unless _.isObject json
-		throw new Error "Serialized JSON is not for calamity" unless json.calamity?
+		throw new Error "Serialized JSON is not for calamity: #{JSON.stringify(json)}" unless json.calamity?
 		msg = new EventMessage json.address, json.data, json.reply
 		msg.status = json.status
 		msg.error = json.error
