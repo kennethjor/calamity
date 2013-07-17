@@ -94,6 +94,11 @@ describe "EventMessage", ->
 				expect(call.args[0] instanceof EventMessage).toBe true
 				expect(call.args[0].data.foo).toBe "foo"
 
+		it "should not add a reply in the JSON if there is not reply handler", ->
+			msg = new EventMessage address, data
+			json = msg.toJSON()
+			expect(json.reply).toBe undefined
+
 		it "should deserialize from JSON", ->
 			json = msg.toJSON()
 			dmsg = EventMessage.fromJSON json

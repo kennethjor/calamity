@@ -69,9 +69,10 @@ EventMessage = class C.EventMessage
 			calamity: C.version
 			address: @address
 			data: @data
-			reply: _.bind @reply, @
 			status: @status
 			error: @error
+		if @_replyHandler?
+			json.reply = _.bind @reply, @
 		return json
 
 	# ## `fromJSON()`
