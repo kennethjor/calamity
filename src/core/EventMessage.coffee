@@ -62,12 +62,25 @@ EventMessage = class C.EventMessage
 	sawBus: (bus) ->
 		return _.contains @_busses, bus.id
 
-	# ## `serialize()`
-	# Serializes the message as JSON.
-	serialize: ->
-		return JSON.stringify @
+	# ## `toJSON()`
+	# Converts the message to a plain JSON object for possible storage or transmission.
+	toJSON: ->
+		json =
+			calamity: C.version
+			address: @address
+			data: @data
+			reply: _.bind @reply, @
+			status: @status
+			error: @error
+		return json
 
-# ## `deserialize()`
-# Desrialises a message from JSON.
-EventMessage.deserialize = (json) ->
-	return undefined
+	# ## `fromJSON()`
+	# Converts a JSON object to an EventMessage.
+	# The message must have been serialized using `EventMessage`'s own `toJSON()` method, otherwise weird things could happen.
+	@fromJSON = (json) ->
+		throw new Error "JSON must be an object" unless _.isObject json
+		throw new Error "Serialized JSON is not for calamity" unless json.calamity?
+		msg = new EventMessage json.address, json.data, json.reply
+		msg.status = json.status
+		msg.error = json.error
+		return msg

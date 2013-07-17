@@ -57,3 +57,59 @@ describe "EventMessage", ->
 				expect(replyMsg.error).toBe error
 				expect(replyMsg.isSuccess()).toBe false
 				expect(replyMsg.isError()).toBe true
+
+	describe "serialization", ->
+		msg = null
+		address = "address"
+		data =
+			a: "foo"
+			b: -56.3
+			c: false
+			d: NaN
+			e: Infinity
+			f: {x:6, y:0}
+		dataString = JSON.stringify data
+		reply = null
+
+		beforeEach ->
+			reply = sinon.spy()
+			msg = new EventMessage address, data, reply
+
+		it "should convert to JSON", ->
+			json = msg.toJSON()
+			expect(json.calamity?).toBe true
+			expect(json.address).toBe address
+			expect(json.status).toBe "ok"
+			expect(json.error).toBe null
+			expect(typeof json.reply).toBe "function"
+			expect(JSON.stringify(json.data)).toBe dataString
+
+			# Replying should still work.
+			json = msg.toJSON()
+			json.reply.call @, foo:"foo"
+			waitsFor (-> reply.called), "Reply never called", 100
+			runs ->
+				expect(reply.callCount).toBe 1
+				call = reply.getCall 0
+				expect(call.args[0] instanceof EventMessage).toBe true
+				expect(call.args[0].data.foo).toBe "foo"
+
+		it "should deserialize from JSON", ->
+			json = msg.toJSON()
+			dmsg = EventMessage.fromJSON json
+			expect(typeof dmsg).toBe "object"
+			expect(dmsg).not.toBe msg
+			expect(dmsg instanceof EventMessage).toBe true
+			expect(dmsg.address).toBe address
+			expect(dmsg.status).toBe "ok"
+			expect(dmsg.error).toBe null
+			expect(JSON.stringify(dmsg.data)).toBe dataString
+
+			# Replying should work like before.
+			dmsg.reply foo:"foo"
+			waitsFor (-> reply.called), "Reply never called", 100
+			runs ->
+				expect(reply.callCount).toBe 1
+				call = reply.getCall 0
+				expect(call.args[0] instanceof EventMessage).toBe true
+				expect(call.args[0].data.foo).toBe "foo"
