@@ -142,3 +142,21 @@ describe "EventMessage", ->
 			check = ->
 				msg.getRequired "doesntexist"
 			expect(check).toThrow("Variable \"doesntexist\" not found on message with address \"address\"")
+
+	# Planned feature.
+	xdescribe "auto-propagation", ->
+		it "should automatically propagate errors using replies when told to", ->
+			reply = sinon.spy()
+			msg = new EventMessage null, "errorpropagation", reply
+			error = new Error "test error"
+			# When inside a message handler, using `autoPropagate` should provide error aggregation.
+			msg.autoPropagate ->
+				throw error
+
+			waitsFor (-> reply.called), "Reply never called", 100
+			runs ->
+				expect(reply.callCount).toBe 1
+				call = reply.getCall 0
+				replyMsg = call.args[0]
+				expect(replyMsg.status).toBe "error"
+				expect(replyMsg.error).toBe error
