@@ -27,7 +27,7 @@ Consider this imaginary `View` class:
 
     	render:
     		@trigger "beforeRender"
-    		_.defer ->
+    		_.defer =>
     			# Real render code ...
     			@element.find("#closeButton").click =>
     				@trigger "closeButtonClicked"
