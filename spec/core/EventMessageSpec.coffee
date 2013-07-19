@@ -143,6 +143,8 @@ describe "EventMessage", ->
 				msg.getRequired "doesntexist"
 			expect(check).toThrow("Variable \"doesntexist\" not found on message with address \"address\"")
 
+		it "should return deep values" # getRequired("a.b.c.d")
+
 	# Planned feature.
 	xdescribe "auto-propagation", ->
 		it "should automatically propagate errors using replies when told to", ->
