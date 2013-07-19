@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.5.0 (dev)
+## 0.5.0.rc.1 (2013-07-19)
 * *API change:* Replies now send a new `EventMessage` object instead of plain object.
 * *Feature:* Implemented `replyError()` on `EventMessage` to allow for easy handling of errors.
 * *Feature:* Implemented `toJSON()`  and `fromJSON()` on `EventMessage`.
