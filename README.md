@@ -96,7 +96,7 @@ The following properties are available on `EventMessage`:
 
 * `msg.address`: The address the message was sent to.
 * `msg.data`: The raw data object supplied on creation.
-* `msg.status`: The status of the message. This can beeither "ok" or "error". Error is used by `replyError()`.
+* `msg.status`: The status of the message. This can beeither "ok" or "error". Error is used by `replyError()`. To check for erros, `isError()` should be used.
 * `msg.error`: If `msg.status` is "error", this will contain the error supplied to `replyError()`.
 
 ## EventMessage methods
