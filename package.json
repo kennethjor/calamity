@@ -32,13 +32,5 @@
 		"jessie": "~ 0.4.2",
 		"sinon": "~ 1.6.0",
 		"doxx": "~ 0.5.9"
-	},
-	"files": [
-		"calamity.js",
-		"calamity-min.js",
-		"package.json",
-		"LICENSE",
-		"README.md",
-		"CHANGELOG.md"
-	]
+	}
 }
