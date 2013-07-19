@@ -76,13 +76,37 @@ This is useful for sending commands instead events.
 Now, whenever any object publishes a message to the `foo:bar` address, handler will be called and you can react on it.
 
 # Events and commands
-Events tell of something which happened and will normally not be replied to.
-They will usually originate from a single object type.
+*Events* tell of something which happened and are transmitted using `trigger()` and `publish()`.
+Normally events will not be replied to and will originate from a single source.
 
-Commands are instructions to perform an action and are very likely to implement replies.
-They will usually only be subscribed to by a single object type and sent from many places.
+*Commands* are instructions to perform an action and are transmitted using `send()`.
+The local events mixin does not include a mechanism for sending commands.
+Commands are much more likely to send replies than events, as they often need to report on their progress.
+Commands will usually only be subscribed to by a single object type, and be sent from many.
+
+Within Calamity there is no real difference between an event and a command, other than the method used for sending it.
+Both of them use the `EventMessage` class to contain themselves.
 
 # Working with messages
+When subscribing to an address, the attached handler is expected to accept a single argument: an `EventMessage` object.
+This object encapsulates the entire message and everything that can be done with it.
+
+## EventMessage properties
+The following properties are available on `EventMessage`:
+
+* `msg.address`: The address the message was sent to.
+* `msg.data`: The raw data object supplied on creation.
+* `msg.status`: The status of the message. This can beeither "ok" or "error". Error is used by `replyError()`.
+* `msg.error`: If `msg.status` is "error", this will contain the error supplied to `replyError()`.
+
+## EventMessage methods
+The following methods can be used to interact with the message:
+
+* `getOptional( param, default )`: Returns a value from `msg.data`. If the value does not exist, the supplied `default` is returned.
+* `getRequried( param )`: Returns a value from `msg.data`. IF the value does not exist, an `Error` is thrown.
+* `reply( data[, replier(msg) ] )`: Sends a reply to the sender.
+* `replyError( error[, replier(msg) ] )`: Sends an error reply to the sender.
+* `isError()`: Returns true if the message represents an error. The supplied error is available via `msg.error`.
 
 # Replying to messages
 
