@@ -66,6 +66,14 @@ module.exports = function(grunt) {
 			all: ["build/test/**/*Test.js"]
 		},
 
+		jessie: {
+			all: {
+				expand: true,
+				cwd: "",
+				src: "build/spec/**/*.js"
+			}
+		},
+
 		watch: {
 			files: [
 				"src/**",
@@ -76,27 +84,12 @@ module.exports = function(grunt) {
 		}
 	});
 
-	// Jessie Jasmine runner.
-	grunt.registerTask("jessie", "Runs Jasmine with Jessie.", function() {
-		done = this.async();
-		command = "./node_modules/jessie/bin/jessie build/spec"
-		exec(command, function(err, stdout, stderr) {
-			console.log(stdout);
-			if (err) {
-				grunt.warn(err);
-				done(false);
-			}
-			else {
-				done(true);
-			}
-		});
-	});
-
 	// Load grunt plugins.
 	grunt.loadNpmTasks("grunt-contrib-coffee");
 	grunt.loadNpmTasks("grunt-contrib-concat");
 	grunt.loadNpmTasks("grunt-contrib-uglify");
 	grunt.loadNpmTasks("grunt-contrib-nodeunit");
+	grunt.loadNpmTasks("grunt-jessie");
 
 	// Default task.
 	grunt.registerTask("default", ["coffee", "concat", "uglify", "nodeunit", "jessie"]);

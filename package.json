@@ -22,15 +22,15 @@
 		"underscore": ">= 1.4.4"
 	},
 	"devDependencies": {
-		"grunt": "~ 0.4",
-		"grunt-contrib-concat": "~ 0.1.3",
-		"grunt-contrib-coffee": "~ 0.6.0",
-		"grunt-contrib-uglify": "~ 0.2.0",
+		"grunt":                  "~ 0.4",
+		"grunt-contrib-concat":   "~ 0.1.3",
+		"grunt-contrib-coffee":   "~ 0.6.0",
+		"grunt-contrib-uglify":   "~ 0.2.0",
 		"grunt-contrib-nodeunit": "~ 0.1.2",
-		"grunt-contrib-watch": "~ 0.3.1",
-		"async": "~ 0.1.22",
-		"jessie": "~ 0.4.2",
-		"sinon": "~ 1.6.0",
-		"doxx": "~ 0.5.9"
+		"grunt-contrib-watch":    "~ 0.3.1",
+		"grunt-jessie":           "~ 0.0.1",
+		"async":                  "~ 0.1.22",
+		"sinon":                  "~ 1.6.0",
+		"doxx":                   "~ 0.5.9"
 	}
 }
