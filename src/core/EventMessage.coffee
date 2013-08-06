@@ -33,16 +33,20 @@ EventMessage = class C.EventMessage
 
 	# ## `replyError()`
 	# Executes the reply handler with an error instead of a reply.
-	replyError: (error, data) ->
+	replyError: (error, data = {}) ->
+		message = error
+		# Ensure meaningful serialization.
+		if error instanceof Error
+			for v in "message,name,stack,fileName,lineNumber,description,number".split(",")
+				data[v] = error[v] if error[v]
+			error = error.message
+			if typeof error.toString is "function"
+				data.string = error.toString()
+				error = data.string
 		# Create new error message.
 		msg = new EventMessage null, data
 		msg.status = "error"
 		msg.error = error
-		# Ensure meaningful serialization.
-		if error instanceof Error
-			for v in "message,name,stack,fileName,lineNumber,description,number".split(",")
-				error[v] = error[v] if error[v]
-			error.string = error.toString() if typeof error.toString is "function"
 		# Send reply.
 		@reply msg
 		return @

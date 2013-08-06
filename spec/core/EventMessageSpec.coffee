@@ -50,11 +50,13 @@ describe "EventMessage", ->
 			message.replyError error, foo:"foo"
 			waitsFor (-> reply.called), "Reply never called", 100
 			runs ->
-				replyMsg = reply.args[0][0]
+				expect(reply.callCount).toBe 1
+				call = reply.getCall 0
+				replyMsg = call.args[0]
 				expect(replyMsg instanceof EventMessage).toBe true
 				expect(replyMsg.data.foo).toBe "foo"
 				expect(replyMsg.status).toBe "error"
-				expect(replyMsg.error).toBe error
+				expect(replyMsg.error).toBe "Foo"
 				expect(replyMsg.isSuccess()).toBe false
 				expect(replyMsg.isError()).toBe true
 

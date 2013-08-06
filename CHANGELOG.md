@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.5.0.rc.2 (dev)
+* *API change:* Changed the way `EventMessage.replyError` serializes the error object to something more meaningful.
+
 ## 0.5.0.rc.1 (2013-07-19)
 * *API change:* Replies now send a new `EventMessage` object instead of plain object.
 * *Feature:* Implemented `replyError()` on `EventMessage` to allow for easy handling of errors.
