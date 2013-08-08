@@ -147,6 +147,14 @@ describe "EventMessage", ->
 
 		it "should return deep values" # getRequired("a.b.c.d")
 
+		it "should support an empty dataset", ->
+			msg = new EventMessage "address", null
+			expect(msg.getOptional "nope").toBe undefined
+			test = ->
+				msg.getRequired "nope"
+			expect(test).toThrow("Variable \"nope\" not found on message with address \"address\"")
+
+
 	# Planned feature.
 	xdescribe "auto-propagation", ->
 		it "should automatically propagate errors using replies when told to", ->

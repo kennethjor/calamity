@@ -2,7 +2,7 @@
 # Represents a single message in the system.
 EventMessage = class C.EventMessage
 	# Constructor.
-	constructor: (@address, @data, replyHandler) ->
+	constructor: (@address, @data = {}, replyHandler) ->
 		# Generate ID.
 		@id = util.genId()
 		# Remebered busses container.
