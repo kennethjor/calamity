@@ -156,8 +156,9 @@ describe "EventMessage", ->
 
 
 	# Planned feature.
-	xdescribe "auto-propagation", ->
-		it "should automatically propagate errors using replies when told to", ->
+	describe "auto-propagation", ->
+		it "should automatically propagate errors using replies when told to"
+		xit "should automatically propagate errors using replies when told to", ->
 			reply = sinon.spy()
 			msg = new EventMessage null, "errorpropagation", reply
 			error = new Error "test error"
