@@ -156,7 +156,21 @@ describe "EventMessage", ->
 
 
 	# Planned feature.
-	describe "auto-propagation", ->
+	describe "proxy", ->
+		it "should propagate own errors unless it has a reply handler"
+		# msg has an error:
+		# msg.proxy (reply) =>
+
+		it "should propagate reply errors unless it has a reply handler"
+		# reply has an error
+		# msg.proxy (reply) =>
+
+		it "should propagate thrown errors unless it has a reply handler"
+		# Supplied handler threw an error
+		# msg.proxy (reply) =>
+
+		it "should execute handler if there are no errors"
+
 		it "should automatically propagate errors using replies when told to"
 		xit "should automatically propagate errors using replies when told to", ->
 			reply = sinon.spy()
@@ -173,3 +187,18 @@ describe "EventMessage", ->
 				replyMsg = call.args[0]
 				expect(replyMsg.status).toBe "error"
 				expect(replyMsg.error).toBe error
+
+	describe "callback proxy", ->
+		it "should propagate own errors unless it has a reply handler"
+		# msg has an error:
+		# msg.proxyCallback (data) =>
+
+		it "should propagate reply errors unless it has a reply handler"
+		# original callback had an error:
+		# msg.proxyCallback (data) =>
+
+		it "should propagate thrown errors unless it has a reply handler"
+		# Supplied handler threw an error:
+		# msg.proxyCallback (data) =>
+
+		it "should execute handler if there are no errors"
