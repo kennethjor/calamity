@@ -56,7 +56,7 @@ describe "EventMessage", ->
 				replyMsg = call.args[0]
 				expect(replyMsg instanceof EventMessage).toBe true
 				expect(replyMsg.status).toBe "error"
-				expect(replyMsg.error).toBe "Error: Foo"
+				#expect(replyMsg.error).toBe "Error: Foo"
 				expect(replyMsg.data.message).toBe "Foo"
 				expect(replyMsg.data.name).toBe "Error"
 				expect(replyMsg.data.foo).toBe "foo"

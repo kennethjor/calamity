@@ -45,6 +45,8 @@ EventMessage = class C.EventMessage
 			if typeof error.toString is "function"
 				data.string = error.toString()
 				error = data.string
+				if data.stack
+					error += " :: " + data.stack
 		# Create new error message.
 		msg = new EventMessage null, data
 		msg.status = "error"
