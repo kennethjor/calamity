@@ -37,9 +37,11 @@ EventMessage = class C.EventMessage
 		message = error
 		# Ensure meaningful serialization.
 		if error instanceof Error
+			# Transfer values to data.
 			for v in "message,name,stack,fileName,lineNumber,description,number".split(",")
-				data[v] = error[v] if error[v]
-			error = error.message
+				val = error[v]
+				val = val.toString() if val and typeof val.toString is "function"
+				data[v] = val
 			if typeof error.toString is "function"
 				data.string = error.toString()
 				error = data.string

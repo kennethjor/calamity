@@ -46,17 +46,20 @@ describe "EventMessage", ->
 				expect(replyMsg.isError()).toBe false
 
 		it "should handle error replies", ->
-			error = new Error "Foo"
-			message.replyError error, foo:"foo"
+			try
+				throw new Error "Foo"
+			catch error then message.replyError error, foo:"foo"
 			waitsFor (-> reply.called), "Reply never called", 100
 			runs ->
 				expect(reply.callCount).toBe 1
 				call = reply.getCall 0
 				replyMsg = call.args[0]
 				expect(replyMsg instanceof EventMessage).toBe true
-				expect(replyMsg.data.foo).toBe "foo"
 				expect(replyMsg.status).toBe "error"
-				expect(replyMsg.error).toBe "Foo"
+				expect(replyMsg.error).toBe "Error: Foo"
+				expect(replyMsg.data.message).toBe "Foo"
+				expect(replyMsg.data.name).toBe "Error"
+				expect(replyMsg.data.foo).toBe "foo"
 				expect(replyMsg.isSuccess()).toBe false
 				expect(replyMsg.isError()).toBe true
 
@@ -164,6 +167,7 @@ describe "EventMessage", ->
 		it "should propagate reply errors unless it has a reply handler"
 		# reply has an error
 		# msg.proxy (reply) =>
+		# data on `reply` should also be propagated.
 
 		it "should propagate thrown errors unless it has a reply handler"
 		# Supplied handler threw an error
