@@ -235,18 +235,3 @@ describe "EventMessage", ->
 				reply = replier.getCall(0).args[0]
 				expect(reply.status).toBe "error"
 				expect(reply.error.split("\n")[0]).toBe "Error: Error :: Error: Error"
-
-	describe "callback proxy", ->
-		it "should propagate own errors unless it has a reply handler"
-		# msg has an error:
-		# msg.proxyCallback (data) =>
-
-		it "should propagate reply errors unless it has a reply handler"
-		# original callback had an error:
-		# msg.proxyCallback (data) =>
-
-		it "should propagate thrown errors unless it has a reply handler"
-		# Supplied handler threw an error:
-		# msg.proxyCallback (data) =>
-
-		it "should execute handler if there are no errors"
