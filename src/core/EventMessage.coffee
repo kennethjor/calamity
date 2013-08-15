@@ -34,7 +34,6 @@ EventMessage = class C.EventMessage
 	# ## `replyError()`
 	# Executes the reply handler with an error instead of a reply.
 	replyError: (error, data = {}) ->
-		message = error
 		# Ensure meaningful serialization.
 		if error instanceof Error
 			# Transfer values to data.
@@ -54,6 +53,43 @@ EventMessage = class C.EventMessage
 		# Send reply.
 		@reply msg
 		return @
+
+	# Returns an event handler which will automatically catch and propagate errors,
+	# removing the need to constantly check incoming messages for errors.
+	#     msg.proxyErrors (reply) ->
+	# Reply will never be an error message, as this would be sent back to the reply handler of message.
+	# If not reply handler is present on the message, errors are thrown instead.
+	proxyErrors: (handler) ->
+		# If we don't have a reply handler, just return a passthrough function.
+		unless _.isFunction @_replyHandler
+			# Throw error if we have one.
+			if @isError()
+				throw @error
+			# Create and return handler.
+			return (msg) ->
+				# Pass message errors.
+				if msg.isError()
+					throw msg.error
+				# No error, pass to handler.
+				handler msg
+		# If we have a reply handler, we need to be more sophisticated.
+		else
+			# Pass errors on self.
+			if @isError()
+				@reply @
+				return
+			# Create and return handler.
+			return (msg) =>
+				# Pass message errors.
+				if msg.isError()
+					@reply msg
+					return
+				# Setup try/catch block and execute handler.
+				try
+					handler msg
+				catch err
+					@replyError err
+					return
 
 	# ## `isSuccess()`
 	# Returns true if this message is marked successful, which is the default state.
