@@ -6,7 +6,7 @@
 * *Feature:* Implemented `replyError()` on `EventMessage` to allow for easy handling of errors.
 * *Feature:* Implemented `toJSON()`  and `fromJSON()` on `EventMessage`.
 * *Feature:* Implemented `getRequired()`  and `getOptional()` on `EventMessage` for data retrieval.
-* *Feature:* Implemented `proxy()` on `EventMessage` to handle automatic proxying of asynchronous errors.
+* *Feature:* Implemented `proxyErrors()` on `EventMessage` to handle automatic proxying of asynchronous errors.
 * *Fix:* `EventMessages` with empty datasets would throw undefined errors with `getRequired` and `getOptional`.
 
 ## 0.4.1 (2013-07-10)
