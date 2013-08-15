@@ -1,17 +1,13 @@
 # Changelog
 
-## feature/error-proxy
-* *Feature:* Implemented `proxy()` on `EventMessage` to handle automatic proxying of asynchronous errors.
-
-## 0.5.0.rc.2 (dev)
-* *API change:* Changed the way `EventMessage.replyError` serializes the error object to something more meaningful.
-* *Fix:* `EventMessages` with empty datasets would throw undefined errors with `getRequired` and `getOptional`.
-
-## 0.5.0.rc.1 (2013-07-19)
+## 0.5.0 (dev)
 * *API change:* Replies now send a new `EventMessage` object instead of plain object.
+* *API change:* Changed the way `EventMessage.replyError` serializes the error object to something more meaningful.
 * *Feature:* Implemented `replyError()` on `EventMessage` to allow for easy handling of errors.
 * *Feature:* Implemented `toJSON()`  and `fromJSON()` on `EventMessage`.
 * *Feature:* Implemented `getRequired()`  and `getOptional()` on `EventMessage` for data retrieval.
+* *Feature:* Implemented `proxy()` on `EventMessage` to handle automatic proxying of asynchronous errors.
+* *Fix:* `EventMessages` with empty datasets would throw undefined errors with `getRequired` and `getOptional`.
 
 ## 0.4.1 (2013-07-10)
 * *Fix:* `Subscription`'s `unsubscribe()` contained a typo, causing it to never work.
