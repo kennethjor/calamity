@@ -91,15 +91,17 @@ EventMessage = class C.EventMessage
 				if other instanceof EventMessage
 					if other.isError()
 						@reply other
+						return
 				else
 					other = new Error other unless other instanceof Error
 					@replyError other
-				return
+					return
 			# Execute handler inside try/catch block.
 			try
 				handler other
 			catch err
 				@replyError err
+		return
 
 	# ## `isSuccess()`
 	# Returns true if this message is marked successful, which is the default state.

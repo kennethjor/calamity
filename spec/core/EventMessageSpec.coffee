@@ -191,6 +191,21 @@ describe "EventMessage", ->
 			expect(handler.callCount).toBe 2
 			msg.catch undefined, handler
 			expect(handler.callCount).toBe 3
+			msg.catch msg, handler
+			expect(handler.callCount).toBe 4
+
+			# Without first arg.
+			msgNoReply.catch handler
+			expect(handler.callCount).toBe 5
+			# With first arg.
+			msgNoReply.catch null, handler
+			expect(handler.callCount).toBe 6
+			msgNoReply.catch undefined, handler
+			expect(handler.callCount).toBe 7
+			msgNoReply.catch msg, handler
+			expect(handler.callCount).toBe 8
+
+			expect(replier.callCount).toBe 0
 
 		it "should propagate message errors unless it has a reply handler", ->
 			# reply has an error:
