@@ -104,7 +104,16 @@ EventMessage = class C.EventMessage
 	# Returns a parameter message data.
 	# If the parameter is not present, `def` is returned.
 	getOptional: (param, def) ->
-		val = @data[param]
+		parts = param.split "."
+		val = @data[parts[0]]
+		# Iterate from second element onwards.
+		if parts.length > 1 then for part in parts.splice 1
+			if _.isObject(val) and val[part]?
+				val = val[part]
+			else
+				val = undefined
+				break
+		# Default.
 		if typeof val is "undefined"
 			return def
 		return val
@@ -112,7 +121,7 @@ EventMessage = class C.EventMessage
 	# Returns a parameter message data.
 	# If the parameter is not present, an error is thrown.
 	getRequired: (param) ->
-		val = @data[param]
+		val = @getOptional param
 		if typeof val is "undefined"
 			throw new Error "Variable \"#{param}\" not found on message with address \"#{@address}\""
 		return val

@@ -146,9 +146,17 @@ describe "EventMessage", ->
 		it "should throw errors on missing required values without a reply handler", ->
 			check = ->
 				msg.getRequired "doesntexist"
-			expect(check).toThrow("Variable \"doesntexist\" not found on message with address \"address\"")
+			expect(check).toThrow "Variable \"doesntexist\" not found on message with address \"address\""
 
-		it "should return deep values" # getRequired("a.b.c.d")
+		it "should return deep values", ->
+			msg = new EventMessage "address",
+				foo:
+					bar: "abc"
+			expect(msg.getOptional "foo.bar").toBe "abc"
+			expect(msg.getOptional "foo.a").toBe undefined
+			expect(msg.getRequired "foo.bar").toBe "abc"
+			test = -> msg.getRequired "foo.a"
+			expect(test).toThrow "Variable \"foo.a\" not found on message with address \"address\""
 
 		it "should support an empty dataset", ->
 			msg = new EventMessage "address", null
