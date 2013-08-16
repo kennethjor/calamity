@@ -6,7 +6,7 @@
 * *Feature:* Implemented `replyError()` on `EventMessage` to allow for easy handling of errors.
 * *Feature:* Implemented `toJSON()`  and `fromJSON()` on `EventMessage`.
 * *Feature:* Implemented `getRequired()`  and `getOptional()` on `EventMessage` for data retrieval.
-* *Feature:* Implemented `proxyErrors()` on `EventMessage` to handle automatic proxying of asynchronous errors.
+* *Feature:* Implemented `proxyErrors()` on `EventMessage` to handle automatic proxying of asynchronous errors. ([pull/2][pull/2])
 * *Feature:* `getOptional` and `getRequired` on `EventMessage` can now return deep values using JSON dot syntax.
 * *Fix:* `EventMessages` with empty datasets would throw undefined errors with `getRequired` and `getOptional`.
 
@@ -18,7 +18,7 @@
 * *Feature:* Added support for basic event bridges via `bridge()`.
 
 ## 0.3.1 (2013-03-19)
-* *Fix:* Added AMD load header. [pull/1](https://bitbucket.org/kennethjor/calamity/pull-request/1)
+* *Fix:* Added AMD load header. ([pull/1][pull/1])
 
 ## 0.3.0 (2013-01-29)
 * *API change:* Removed initial underscore from `_trigger()`, `_subscribe()`, and `_publish()` on `ProxyMixin` and `EmitterMixin`. It makes assumptions about code style.
@@ -39,3 +39,6 @@
 
 * Initial public release.
 * *Feature:* `EventBus` implementation.
+
+[pull/1]: https://bitbucket.org/kennethjor/calamity/pull-request/1 "Added RequireJS support to init.js."
+[pull/2]: https://bitbucket.org/kennethjor/calamity/pull-request/2 "Error proxy."
