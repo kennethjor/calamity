@@ -58,14 +58,14 @@ EventMessage = class C.EventMessage
 	# removing the need to constantly check incoming messages for errors.
 	# Example usage:
 	#
-	#     @send "address", msg.proxyErrors otherMsg, (reply) ->
+	#     @send "address", msg.catch otherMsg, (reply) ->
 	#
 	# In the above example, proxyErrors will check msg and otherMsg for errors, and pass them to the reply handler
 	# for msg. If no errors are detected, it will execute the supplied handler inside a try/catch block, and pass
 	# any errors back through msg.
 	# If no reply handler exists on msg, errors will be rethrown, or no try/catch block will be used.
 	# otherMsg is optional.
-	proxyErrors: (otherMsg, handler) ->
+	catch: (otherMsg, handler) ->
 		unless otherMsg instanceof EventMessage and _.isFunction handler
 			if _.isFunction otherMsg
 				handler = otherMsg
