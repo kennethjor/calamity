@@ -170,6 +170,7 @@ describe "EventMessage", ->
 	describe "error proxy", ->
 		msg = null
 		msgNoReply = null
+		errorMsg = null
 		replier = null
 		handler = null
 		beforeEach ->
@@ -177,9 +178,12 @@ describe "EventMessage", ->
 			handler = sinon.spy()
 			msg = new EventMessage "address", null, replier
 			msgNoReply = new EventMessage "address"
+			errorMsg = new EventMessage
+			errorMsg.status = "error"
+			errorMsg.error = "Error"
 
 		it "should propagate own errors unless it has a reply handler", ->
-			# msg has an error
+			# msg has an error:
 			# msg.proxyErrors (reply) =>
 			# data on `reply` should also be propagated.
 
@@ -202,12 +206,10 @@ describe "EventMessage", ->
 				expect(reply).toBe msg
 
 		it "should propagate reply errors unless it has a reply handler", ->
-			# reply has an error
+			# reply has an error:
 			# msg.proxyErrors (reply) =>
 			# data on `reply` should also be propagated.
-			errorMsg = new EventMessage
-			errorMsg.status = "error"
-			errorMsg.error = "Error"
+
 			# No reply should throw the exception directly.
 			proxyFuncNoReply = msgNoReply.proxyErrors handler
 			testNoReply = -> proxyFuncNoReply errorMsg
@@ -225,7 +227,7 @@ describe "EventMessage", ->
 				expect(reply.error).toBe "Error"
 
 		it "should propagate thrown errors unless it has a reply handler", ->
-			# Supplied handler threw an error
+			# Supplied handler threw an error:
 			# msg.proxy (reply) =>
 			handler = sinon.spy -> throw new Error "Error"
 			# No reply should throw the exception directly.
@@ -243,3 +245,20 @@ describe "EventMessage", ->
 				reply = replier.getCall(0).args[0]
 				expect(reply.status).toBe "error"
 				expect(reply.error.split("\n")[0]).toBe "Error: Error :: Error: Error"
+
+		it "should accept an optional message an proxy error unless it has a reply handler", ->
+			# otherMsg has an error:
+			# msg.proxy otherMsg, (reply) =>
+
+			# No reply should throw the exception directly.
+			testNoReply = -> msgNoReply.proxyErrors errorMsg, handler
+			expect(testNoReply).toThrow "Error"
+			expect(handler.callCount).toBe 0
+			# With reply handler should pass the error along.
+			msg.proxyErrors errorMsg, handler
+			waitsFor (-> replier.called), "Replier never called", 100
+			runs ->
+				expect(replier.callCount).toBe 1
+				expect(handler.callCount).toBe 0
+				reply = replier.getCall(0).args[0]
+				expect(reply).toBe errorMsg

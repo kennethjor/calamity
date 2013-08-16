@@ -54,30 +54,46 @@ EventMessage = class C.EventMessage
 		@reply msg
 		return @
 
-	# Returns an event handler which will automatically catch and propagate errors,
+	# Returns a wrapping event handler which will automatically catch and propagate errors,
 	# removing the need to constantly check incoming messages for errors.
-	#     msg.proxyErrors (reply) ->
-	# Reply will never be an error message, as this would be sent back to the reply handler of message.
-	# If not reply handler is present on the message, errors are thrown instead.
-	proxyErrors: (handler) ->
+	# Example usage:
+	#
+	#     @send "address", msg.proxyErrors otherMsg, (reply) ->
+	#
+	# In the above example, proxyErrors will check msg and otherMsg for errors, and pass them to the reply handler
+	# for msg. If no errors are detected, it will execute the supplied handler inside a try/catch block, and pass
+	# any errors back through msg.
+	# If no reply handler exists on msg, errors will be rethrown, or no try/catch block will be used.
+	# otherMsg is optional.
+	proxyErrors: (otherMsg, handler) ->
+		unless otherMsg instanceof EventMessage and _.isFunction handler
+			if _.isFunction otherMsg
+				handler = otherMsg
+				otherMsg = undefined
+			else
+				throw new Error "Optional otherMsg must be an EventMessage and handler must be a function, msg:#{typeof otherMsg}, handler:#{typeof handler}"
 		# If we don't have a reply handler, just return a passthrough function.
 		unless _.isFunction @_replyHandler
 			# Throw error if we have one.
 			if @isError()
 				throw @error
+			if otherMsg? and otherMsg.isError()
+				throw otherMsg.error
 			# Create and return handler.
 			return (msg) ->
 				# Pass message errors.
 				if msg.isError()
 					throw msg.error
 				# No error, pass to handler.
-				handler msg
+				handler msg if _.isFunction handler
 		# If we have a reply handler, we need to be more sophisticated.
 		else
 			# Pass errors on self.
 			if @isError()
 				@reply @
 				return
+			if otherMsg? and otherMsg.isError()
+				@reply otherMsg
 			# Create and return handler.
 			return (msg) =>
 				# Pass message errors.
@@ -85,11 +101,12 @@ EventMessage = class C.EventMessage
 					@reply msg
 					return
 				# Setup try/catch block and execute handler.
-				try
-					handler msg
-				catch err
-					@replyError err
-					return
+				if _.isFunction handler
+					try
+						handler msg
+					catch err
+						@replyError err
+						return
 
 	# ## `isSuccess()`
 	# Returns true if this message is marked successful, which is the default state.
