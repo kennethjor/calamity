@@ -182,74 +182,19 @@ describe "EventMessage", ->
 			errorMsg.status = "error"
 			errorMsg.error = "Error"
 
-		it "should propagate own errors unless it has a reply handler", ->
-			# msg has an error:
-			# msg.catch (reply) =>
-			# data on `reply` should also be propagated.
-
-			proxyFunc = msg.catch handler
-			msg.status = "error"
-			msg.error = "Error"
-			msgNoReply.status = "error"
-			msgNoReply.error = "Error"
-			# No reply should throw the exception directly.
-			testNoReply = -> msgNoReply.catch handler
-			expect(testNoReply).toThrow "Error"
-			expect(handler.callCount).toBe 0
-			# With reply handler should pass the error along.
+		it "should pass the call onto handler if nothing is wrong", ->
+			# Without first arg.
 			msg.catch handler
-			waitsFor (-> replier.called), "Replier never called", 100
-			runs ->
-				expect(replier.callCount).toBe 1
-				expect(handler.callCount).toBe 0
-				reply = replier.getCall(0).args[0]
-				expect(reply).toBe msg
-
-		it "should propagate reply errors unless it has a reply handler", ->
-			# reply has an error:
-			# msg.catch (reply) =>
-			# data on `reply` should also be propagated.
-
-			# No reply should throw the exception directly.
-			proxyFuncNoReply = msgNoReply.catch handler
-			testNoReply = -> proxyFuncNoReply errorMsg
-			expect(testNoReply).toThrow "Error"
-			expect(handler.callCount).toBe 0
-			# With reply handler should pass the error along.
-			proxyFunc = msg.catch handler
-			proxyFunc errorMsg
-			waitsFor (-> replier.called), "Replier never called", 100
-			runs ->
-				expect(replier.callCount).toBe 1
-				expect(handler.callCount).toBe 0
-				reply = replier.getCall(0).args[0]
-				expect(reply.status).toBe "error"
-				expect(reply.error).toBe "Error"
-
-		it "should propagate thrown errors unless it has a reply handler", ->
-			# Supplied handler threw an error:
-			# msg.catch (reply) =>
-			handler = sinon.spy -> throw new Error "Error"
-			# No reply should throw the exception directly.
-			proxyFuncNoReply = msgNoReply.catch handler
-			testNoReply = -> proxyFuncNoReply new EventMessage
-			expect(testNoReply).toThrow "Error"
 			expect(handler.callCount).toBe 1
-			# With reply handler should pass the error along.
-			proxyFunc = msg.catch handler
-			proxyFunc new EventMessage
-			waitsFor (-> replier.called), "Replier never called", 100
-			runs ->
-				expect(replier.callCount).toBe 1
-				expect(handler.callCount).toBe 2
-				reply = replier.getCall(0).args[0]
-				expect(reply.status).toBe "error"
-				expect(reply.error.split("\n")[0]).toBe "Error: Error :: Error: Error"
+			# With first arg.
+			msg.catch null, handler
+			expect(handler.callCount).toBe 2
+			msg.catch undefined, handler
+			expect(handler.callCount).toBe 3
 
-		it "should accept an optional message and proxy errors unless it has a reply handler", ->
-			# otherMsg has an error:
-			# msg.catch otherMsg, (reply) =>
-
+		it "should propagate message errors unless it has a reply handler", ->
+			# reply has an error:
+			# msg.catch reply, =>
 			# No reply should throw the exception directly.
 			testNoReply = -> msgNoReply.catch errorMsg, handler
 			expect(testNoReply).toThrow "Error"
@@ -263,9 +208,9 @@ describe "EventMessage", ->
 				reply = replier.getCall(0).args[0]
 				expect(reply).toBe errorMsg
 
-		it "should accept an optional error and proxy it unless it has a reply handler", ->
-			# otherMsg *is* an error:
-			# msg.catch otherMsg, (reply) =>
+		it "should propagate real errors unless it has a reply handler", ->
+			# reply *is* an error:
+			# msg.catch reply, =>
 			error = new Error "Error"
 			# No reply should throw the exception directly.
 			testNoReply = -> msgNoReply.catch error, handler
@@ -281,11 +226,20 @@ describe "EventMessage", ->
 				expect(reply.status).toBe "error"
 				expect(reply.error.split("\n")[0]).toBe "Error: Error :: Error: Error"
 
-		it "should pass the call onyo handler if nothing is wrong", ->
-			catchFunc = msg.catch null, handler
-			catchFunc msg
-			waitsFor (-> handler.called), "Handler never called", 100
+		it "should propagate thrown errors unless it has a reply handler", ->
+			# Supplied handler threw an error:
+			# msg.catch (reply) =>
+			handler = sinon.spy -> throw new Error "Error"
+			# No reply should throw the exception directly.
+			testNoReply = -> msgNoReply.catch handler
+			expect(testNoReply).toThrow "Error"
+			expect(handler.callCount).toBe 1
+			# With reply handler should pass the error along.
+			msg.catch handler
+			waitsFor (-> replier.called), "Replier never called", 100
 			runs ->
-				expect(handler.callCount).toBe 1
-				receivedMsg = handler.getCall(0).args[0]
-				expect(receivedMsg).toBe msg
+				expect(replier.callCount).toBe 1
+				expect(handler.callCount).toBe 2
+				reply = replier.getCall(0).args[0]
+				expect(reply.status).toBe "error"
+				expect(reply.error.split("\n")[0]).toBe "Error: Error :: Error: Error"

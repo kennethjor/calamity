@@ -54,64 +54,52 @@ EventMessage = class C.EventMessage
 		@reply msg
 		return @
 
-	# Returns a wrapping event handler which will automatically catch and propagate errors,
-	# removing the need to constantly check incoming messages for errors.
+	# Automatically catches and propagates errors, removing the need to constantly check incoming messages for errors.
 	# Example usage:
 	#
-	#     @send "address", msg.catch other, (reply) ->
+	#     @send "address", (reply) => msg.catch reply, =>
+	#         # your code here, reply will never be an error.
 	#
-	# In the above example, proxyErrors will check msg and other for errors, and pass them to the reply handler
-	# for msg. If no errors are detected, it will execute the supplied handler inside a try/catch block, and pass
+	# In the above example, catch will check reply for errors, and pass them to the reply handler on msg.
+	# If no errors are detected, it will execute the supplied handler inside a try/catch block, and pass
 	# any errors back through msg.
 	# If no reply handler exists on msg, errors will be rethrown, or no try/catch block will be used.
-	# other is optional and can be an EventMessage or something throwable, or undefined.
+	# The first argument is optional and can be an EventMessage, or any throwable value.
+	# If it's falsy, then it's simply ignored and handler is executed.
 	catch: (other, handler) ->
 		unless handler?
 			unless _.isFunction other
 				throw new Error "Supplied handler is not a function, #{typeof other} supplied"
 			handler = other
 			other = undefined
-		# If we don't have a reply handler, just return a passthrough function.
+		# If we don't have a reply handler, throw error directly.
 		unless _.isFunction @_replyHandler
 			# Throw error if we have one.
-			if @isError()
-				throw @error
 			if other?
-				if other instanceof EventMessage and other.isError()
-					throw other.error
+				if other instanceof EventMessage
+					if other.isError()
+						throw other.error
 				else
+					other = new Error other unless other instanceof Error
 					throw other
-			# Create and return handler.
-			return (msg) ->
-				# Pass message errors.
-				if msg.isError()
-					throw msg.error
-				# No error, pass to handler.
-				handler msg if _.isFunction handler
-		# If we have a reply handler, we need to be more sophisticated.
+			# Execute handler.
+			handler other
+		# If we have a reply handler, pass errors to it.
 		else
-			# Pass errors on self.
-			if @isError()
-				@reply @
-				return
+			# Pass supplied errors.
 			if other?
-				if other instanceof EventMessage and other.isError()
-					@reply other
+				if other instanceof EventMessage
+					if other.isError()
+						@reply other
 				else
+					other = new Error other unless other instanceof Error
 					@replyError other
-			# Create and return handler.
-			return (msg) =>
-				# Pass message errors.
-				if msg.isError()
-					@reply msg
-					return
-				# Setup try/catch block and execute handler.
-				if _.isFunction handler
-					try
-						handler msg
-					catch err
-						@replyError err
-						return
+				return
+			# Execute handler inside try/catch block.
+			try
+				handler other
+			catch err
+				@replyError err
 
 	# ## `isSuccess()`
 	# Returns true if this message is marked successful, which is the default state.
