@@ -246,7 +246,7 @@ describe "EventMessage", ->
 				expect(reply.status).toBe "error"
 				expect(reply.error.split("\n")[0]).toBe "Error: Error :: Error: Error"
 
-		it "should accept an optional message an proxy error unless it has a reply handler", ->
+		it "should accept an optional message and proxy errors unless it has a reply handler", ->
 			# otherMsg has an error:
 			# msg.catch otherMsg, (reply) =>
 
@@ -262,3 +262,30 @@ describe "EventMessage", ->
 				expect(handler.callCount).toBe 0
 				reply = replier.getCall(0).args[0]
 				expect(reply).toBe errorMsg
+
+		it "should accept an optional error and proxy it unless it has a reply handler", ->
+			# otherMsg *is* an error:
+			# msg.catch otherMsg, (reply) =>
+			error = new Error "Error"
+			# No reply should throw the exception directly.
+			testNoReply = -> msgNoReply.catch error, handler
+			expect(testNoReply).toThrow "Error"
+			expect(handler.callCount).toBe 0
+			# With reply handler should pass the error along.
+			msg.catch error, handler
+			waitsFor (-> replier.called), "Replier never called", 100
+			runs ->
+				expect(replier.callCount).toBe 1
+				expect(handler.callCount).toBe 0
+				reply = replier.getCall(0).args[0]
+				expect(reply.status).toBe "error"
+				expect(reply.error.split("\n")[0]).toBe "Error: Error :: Error: Error"
+
+		it "should pass the call onyo handler if nothing is wrong", ->
+			catchFunc = msg.catch null, handler
+			catchFunc msg
+			waitsFor (-> handler.called), "Handler never called", 100
+			runs ->
+				expect(handler.callCount).toBe 1
+				receivedMsg = handler.getCall(0).args[0]
+				expect(receivedMsg).toBe msg

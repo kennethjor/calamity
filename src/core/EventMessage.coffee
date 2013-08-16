@@ -58,27 +58,29 @@ EventMessage = class C.EventMessage
 	# removing the need to constantly check incoming messages for errors.
 	# Example usage:
 	#
-	#     @send "address", msg.catch otherMsg, (reply) ->
+	#     @send "address", msg.catch other, (reply) ->
 	#
-	# In the above example, proxyErrors will check msg and otherMsg for errors, and pass them to the reply handler
+	# In the above example, proxyErrors will check msg and other for errors, and pass them to the reply handler
 	# for msg. If no errors are detected, it will execute the supplied handler inside a try/catch block, and pass
 	# any errors back through msg.
 	# If no reply handler exists on msg, errors will be rethrown, or no try/catch block will be used.
-	# otherMsg is optional.
-	catch: (otherMsg, handler) ->
-		unless otherMsg instanceof EventMessage and _.isFunction handler
-			if _.isFunction otherMsg
-				handler = otherMsg
-				otherMsg = undefined
-			else
-				throw new Error "Optional otherMsg must be an EventMessage and handler must be a function, msg:#{typeof otherMsg}, handler:#{typeof handler}"
+	# other is optional and can be an EventMessage or something throwable, or undefined.
+	catch: (other, handler) ->
+		unless handler?
+			unless _.isFunction other
+				throw new Error "Supplied handler is not a function, #{typeof other} supplied"
+			handler = other
+			other = undefined
 		# If we don't have a reply handler, just return a passthrough function.
 		unless _.isFunction @_replyHandler
 			# Throw error if we have one.
 			if @isError()
 				throw @error
-			if otherMsg? and otherMsg.isError()
-				throw otherMsg.error
+			if other?
+				if other instanceof EventMessage and other.isError()
+					throw other.error
+				else
+					throw other
 			# Create and return handler.
 			return (msg) ->
 				# Pass message errors.
@@ -92,8 +94,11 @@ EventMessage = class C.EventMessage
 			if @isError()
 				@reply @
 				return
-			if otherMsg? and otherMsg.isError()
-				@reply otherMsg
+			if other?
+				if other instanceof EventMessage and other.isError()
+					@reply other
+				else
+					@replyError other
 			# Create and return handler.
 			return (msg) =>
 				# Pass message errors.
