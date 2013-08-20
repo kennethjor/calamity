@@ -26,9 +26,10 @@ EventMessage = class C.EventMessage
 		unless data instanceof EventMessage
 			data = new EventMessage null, data, replier
 		# Execute.
-		_.defer ->
-			replyHandler data
-			return
+		replyHandler data
+#		_.defer ->
+#			replyHandler data
+#			return
 		return @
 
 	# ## `replyError()`

@@ -22,8 +22,9 @@ Subscription = class C.Subscription
 		# Bind handler.
 		bound = _.bind @handler, @context
 		# Execute.
-		_.defer ->
-			bound msg
-			return
+		bound msg
+#		_.defer ->
+#			bound msg
+#			return
 
 		return @
