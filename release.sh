@@ -19,7 +19,7 @@ grunt
 
 # Commit version.
 hg ci -m "Release version $version"
-exit
+
 # Push to central repo.
 hg push
 hg push github
