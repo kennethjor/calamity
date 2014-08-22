@@ -1,11 +1,10 @@
-syntas: regexp
+syntas: glob
 
-^\.idea/
-^node_modules/
-^build/
-^dist/
-calamity\.js
-calamity-min\.js
-_SpecRunner\.html
-npm-debug\.log
-
+build/
+dist/
+node_modules/
+bower_components/
+.idea/
+.npmignore
+_SpecRunner.html
+npm-debug.log

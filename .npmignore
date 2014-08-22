@@ -1,7 +1,7 @@
+.*
 build
+dist
 node_modules
-.idea
-.npmignore
-.hg
-.hgtags
-.hgignore
+bower_components
+_SpecRunner.html
+npm-debug.log

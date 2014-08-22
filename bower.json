@@ -3,7 +3,7 @@
   "main": "calamity.js",
   "version": "0.5.0-rc.6",
   "authors": [
-    "Kenneth Jorgensen <kennethjor@gmail.com>"
+    "Kenneth Jorgensen <kennethjor@gmail.com> (http://kennethjorgensen.com/)"
   ],
   "description": "An event bus library for event-driven applications.",
   "moduleType": [
@@ -18,9 +18,11 @@
   "homepage": "https://bitbucket.org/kennethjor/calamity",
   "ignore": [
     "**/.*",
+    "build",
+    "dist",
     "node_modules",
     "bower_components",
-    "test",
-    "tests"
+    "_SpecRunner.html",
+    "npm-debug.log"
   ]
 }
