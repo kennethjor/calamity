@@ -24,5 +24,8 @@
     "bower_components",
     "_SpecRunner.html",
     "npm-debug.log"
-  ]
+  ],
+  "dependencies": {
+	  "underscore": ">= 1.4.4"
+  }
 }

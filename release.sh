@@ -22,8 +22,8 @@ hg ci -m "Release version $version"
 hg tag -m "Tagged version $version" $version
 
 # Push to central repo.
-#hg push
-#hg push github
+hg push
+hg push github
 
 # Release to NPM.
-#npm publish
+npm publish
