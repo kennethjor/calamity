@@ -1,0 +1,26 @@
+{
+  "name": "calamity",
+  "main": "calamity.js",
+  "version": "0.5.0-rc.6",
+  "authors": [
+    "Kenneth Jorgensen <kennethjor@gmail.com>"
+  ],
+  "description": "An event bus library for event-driven applications.",
+  "moduleType": [
+    "amd",
+    "globals"
+  ],
+  "keywords": [
+    "events",
+    "pubsub"
+  ],
+  "license": "MIT",
+  "homepage": "https://bitbucket.org/kennethjor/calamity",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
