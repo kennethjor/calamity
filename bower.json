@@ -1,7 +1,7 @@
 {
   "name": "calamity",
   "main": "calamity.js",
-  "version": "0.5.0-rc.6",
+  "version": "0.5.0-rc.7",
   "author": "Kenneth Jorgensen <kennethjor@gmail.com> (http://kennethjorgensen.com/)",
   "description": "An event bus library for event-driven applications.",
   "moduleType": [
