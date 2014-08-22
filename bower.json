@@ -1,7 +1,7 @@
 {
   "name": "calamity",
   "main": "calamity.js",
-  "version": "0.5.0-rc.5",
+  "version": "0.5.0-rc.6",
   "authors": [
     "Kenneth Jorgensen <kennethjor@gmail.com> (http://kennethjorgensen.com/)"
   ],

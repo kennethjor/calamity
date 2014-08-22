@@ -1,4 +1,4 @@
-/*! Calamity 0.5.0-rc.5 - MIT license */
+/*! Calamity 0.5.0-rc.6 - MIT license */
 (function(){
 // Import underscore if necessary.
 if (typeof _ === "undefined" && typeof require === "function") {
@@ -6,7 +6,7 @@ if (typeof _ === "undefined" && typeof require === "function") {
 }
 
 // Init Calamity object.
-var C = {version: "0.5.0-rc.5"};
+var C = {version: "0.5.0-rc.6"};
 
 var root = this
 // CommonJS
