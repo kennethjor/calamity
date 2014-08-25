@@ -1,4 +1,4 @@
-{EventBus, EventMessage} = require "../../calamity"
+{Bus, EventMessage} = require "../../calamity"
 sinon = require "sinon"
 _ = require "underscore"
 
@@ -15,11 +15,11 @@ describe "EventMessage", ->
 
 	it "should remember if it has seen a bus or not", -> # <-- REMOVE
 		msg = new EventMessage
-		bus = new EventBus
+		bus = new Bus
 		expect(msg.sawBus bus).toBe false
 		msg.addBus bus
 		expect(msg.sawBus bus).toBe true
-		expect(msg.sawBus new EventBus).toBe false
+		expect(msg.sawBus new Bus).toBe false
 
 	describe "replies", ->
 		message = null

@@ -25,73 +25,18 @@ else {
 	root['calamity'] = Calamity;
 }
 (function() {
-  var EmitterMixin, EventBridge, EventBus, EventMessage, GLOBAL_BUS, HEX, MemoryEventBridge, Subscription, floor, getEmitterBus, hasEmitterBus, random, util,
+  var Bus, Emitter, EventBridge, EventMessage, GLOBAL_BUS, HEX, MemoryEventBridge, Subscription, floor, getEmitterBus, hasEmitterBus, random, util,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  EmitterMixin = Calamity.EmitterMixin = (function() {
-    function EmitterMixin() {}
-
-    EmitterMixin.prototype.on = function(address, handler, context) {
-      context || (context = this);
-      return getEmitterBus(this).subscribe(address, handler, context);
-    };
-
-    EmitterMixin.prototype.off = function(address, handler, context) {
-      if (!hasEmitterBus(this)) {
-        return;
-      }
-      context || (context = this);
-      return getEmitterBus(this).unsubscribe(address, handler, context);
-    };
-
-    EmitterMixin.prototype.trigger = function(address, data, reply) {
-      if (!hasEmitterBus(this)) {
-        return;
-      }
-      return getEmitterBus(this).publish(address, data, reply);
-    };
-
-    return EmitterMixin;
-
-  })();
-
-  hasEmitterBus = function(obj) {
-    var _ref, _ref1;
-    if ((obj != null ? (_ref = obj._calamity) != null ? (_ref1 = _ref.emitter) != null ? _ref1.bus : void 0 : void 0 : void 0) == null) {
-      return false;
-    }
-    return true;
-  };
-
-  getEmitterBus = function(obj) {
-    var calamity, emitter;
-    calamity = (obj._calamity || (obj._calamity = {}));
-    emitter = (calamity.emitter || (calamity.emitter = {}));
-    return emitter.bus || (emitter.bus = new EventBus());
-  };
-
-  Calamity.emitter = function(obj) {
-    return _.extend(obj, EmitterMixin.prototype);
-  };
-
-  EventBridge = Calamity.EventBridge = (function() {
-    Calamity.emitter(EventBridge.prototype);
-
-    function EventBridge() {}
-
-    return EventBridge;
-
-  })();
-
-  EventBus = Calamity.EventBus = (function() {
-    function EventBus() {
+  Bus = Calamity.Bus = (function() {
+    function Bus() {
       this.id = util.genId();
       this._subscriptions = {};
       this._bridges = [];
     }
 
-    EventBus.prototype.subscribe = function(address, handler, context) {
+    Bus.prototype.subscribe = function(address, handler, context) {
       var sub;
       if (!this._subscriptions[address]) {
         this._subscriptions[address] = [];
@@ -104,7 +49,7 @@ else {
       return sub;
     };
 
-    EventBus.prototype.unsubscribe = function(address, handler) {
+    Bus.prototype.unsubscribe = function(address, handler) {
       var i, s, sub, _i, _j, _len, _len1, _ref, _ref1;
       sub = address;
       if (sub instanceof Subscription) {
@@ -137,7 +82,7 @@ else {
       });
     };
 
-    EventBus.prototype.publish = function(address, data, reply) {
+    Bus.prototype.publish = function(address, data, reply) {
       var msg;
       msg = this._createMessage(address, data, reply);
       address = msg.address;
@@ -153,7 +98,7 @@ else {
       return this;
     };
 
-    EventBus.prototype.send = function(address, data, reply) {
+    Bus.prototype.send = function(address, data, reply) {
       var msg;
       msg = this._createMessage(address, data, reply);
       address = msg.address;
@@ -168,7 +113,7 @@ else {
       return this;
     };
 
-    EventBus.prototype.bridge = function(bridge) {
+    Bus.prototype.bridge = function(bridge) {
       if (!(bridge instanceof EventBridge)) {
         throw new Error("Briges must extend Calamity.EventBridge");
       }
@@ -178,7 +123,7 @@ else {
       return this;
     };
 
-    EventBus.prototype._createMessage = function(address, data, reply) {
+    Bus.prototype._createMessage = function(address, data, reply) {
       var msg;
       msg = address;
       if (!(msg instanceof EventMessage)) {
@@ -187,7 +132,7 @@ else {
       return msg;
     };
 
-    EventBus.prototype._publishAddress = function(address, msg) {
+    Bus.prototype._publishAddress = function(address, msg) {
       var subscription, _i, _len, _ref;
       if (!this._subscriptions[address]) {
         return;
@@ -199,7 +144,7 @@ else {
       }
     };
 
-    EventBus.prototype._sendAddress = function(address, msg) {
+    Bus.prototype._sendAddress = function(address, msg) {
       var i, len, subs;
       if (!this._subscriptions[address]) {
         return;
@@ -210,7 +155,7 @@ else {
       subs[i].trigger(msg);
     };
 
-    EventBus.prototype._bridgeProp = function(type, data) {
+    Bus.prototype._bridgeProp = function(type, data) {
       var address, b, _i, _len, _ref;
       if (!(this._bridges.length > 0)) {
         return;
@@ -224,16 +169,71 @@ else {
       }
     };
 
-    return EventBus;
+    return Bus;
 
   })();
 
   GLOBAL_BUS = null;
 
-  Calamity.bus = function() {
-    GLOBAL_BUS || (GLOBAL_BUS = new EventBus());
+  Calamity.global = function() {
+    GLOBAL_BUS || (GLOBAL_BUS = new Bus());
     return GLOBAL_BUS;
   };
+
+  Emitter = Calamity.Emitter = (function() {
+    function Emitter() {}
+
+    Emitter.prototype.on = function(address, handler, context) {
+      context || (context = this);
+      return getEmitterBus(this).subscribe(address, handler, context);
+    };
+
+    Emitter.prototype.off = function(address, handler, context) {
+      if (!hasEmitterBus(this)) {
+        return;
+      }
+      context || (context = this);
+      return getEmitterBus(this).unsubscribe(address, handler, context);
+    };
+
+    Emitter.prototype.trigger = function(address, data, reply) {
+      if (!hasEmitterBus(this)) {
+        return;
+      }
+      return getEmitterBus(this).publish(address, data, reply);
+    };
+
+    return Emitter;
+
+  })();
+
+  hasEmitterBus = function(obj) {
+    var _ref, _ref1;
+    if ((obj != null ? (_ref = obj._calamity) != null ? (_ref1 = _ref.emitter) != null ? _ref1.bus : void 0 : void 0 : void 0) == null) {
+      return false;
+    }
+    return true;
+  };
+
+  getEmitterBus = function(obj) {
+    var calamity, emitter;
+    calamity = (obj._calamity || (obj._calamity = {}));
+    emitter = (calamity.emitter || (calamity.emitter = {}));
+    return emitter.bus || (emitter.bus = new Bus());
+  };
+
+  Calamity.emitter = function(obj) {
+    return _.extend(obj, Emitter.prototype);
+  };
+
+  EventBridge = Calamity.EventBridge = (function() {
+    Calamity.emitter(EventBridge.prototype);
+
+    function EventBridge() {}
+
+    return EventBridge;
+
+  })();
 
   EventMessage = Calamity.EventMessage = (function() {
     function EventMessage(address, data, replyHandler) {

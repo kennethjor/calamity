@@ -5,7 +5,7 @@
 * *API change:* Changed the way `EventMessage.replyError` serializes the error object to something more meaningful.
 * *API change:* Changed events to fire synchronously as an experiment. Asynchronous handling seems to cause more trouble that it's worth.
 * *API change:* Removed `calamity.proxy()`, it didn't really make sense.
-* *API change:* Renamed `calamity.global()` to `calamity.bus()` for global bus access.
+* *API change:* Renamed `EventBus` to `Bus`.
 * *Feature:* Implemented `replyError()` on `EventMessage` to allow for easy handling of errors.
 * *Feature:* Implemented `toJSON()`  and `fromJSON()` on `EventMessage`.
 * *Feature:* Implemented `getRequired()`  and `getOptional()` on `EventMessage` for data retrieval.

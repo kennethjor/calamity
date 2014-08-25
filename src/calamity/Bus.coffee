@@ -1,6 +1,6 @@
 # # EventBus
 # Manages passing events from publishers to subscribers.
-EventBus = class Calamity.EventBus
+Bus = class Calamity.Bus
 	constructor: ->
 		# Generate ID.
 		@id = util.genId()
@@ -130,6 +130,6 @@ EventBus = class Calamity.EventBus
 
 # We automatically construct a default global bus when needed.
 GLOBAL_BUS = null
-Calamity.bus = ->
-	GLOBAL_BUS or= new EventBus()
+Calamity.global = ->
+	GLOBAL_BUS or= new Bus()
 	return GLOBAL_BUS

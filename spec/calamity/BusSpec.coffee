@@ -2,11 +2,11 @@ calamity = require "../../calamity"
 sinon = require "sinon"
 _ = require "underscore"
 
-describe "EventBus", ->
+describe "Bus", ->
 	bus = null
 
 	beforeEach ->
-		bus = new calamity.EventBus()
+		bus = new calamity.Bus()
 
 	it "should route to and execute the correct handlers", (done) ->
 		handler11 = sinon.spy()
@@ -53,3 +53,7 @@ describe "EventBus", ->
 				expect(handler2.callCount).toBe 1
 			expect(handler1.callCount + handler2.callCount).toBe 1
 			done()
+
+	it "should provide a global bus", ->
+		expect(calamity.global() instanceof calamity.Bus)
+		expect(calamity.global()).toBe calamity.global()
