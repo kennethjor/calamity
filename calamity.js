@@ -102,10 +102,8 @@ Bridge = Calamity.Bridge = (function() {
         var i, limit, seen;
         seen = _this._seen;
         limit = new Date().getTime() - 100;
-        console.log(limit, seen);
         i = 0;
         while (i < seen.length) {
-          console.log(i, seen[i]);
           if (seen[i].time < limit) {
             seen.splice(i, 1);
           } else {
