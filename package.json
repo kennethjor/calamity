@@ -25,6 +25,7 @@
   },
   "devDependencies": {
     "async": "~ 0.1.22",
+    "coffee-script": "^1.7.1",
     "doxx": "~ 0.5.9",
     "grunt": "~ 0.4",
     "grunt-contrib-coffee": "~ 0.6.0",
@@ -33,6 +34,13 @@
     "grunt-contrib-uglify": "~ 0.2.0",
     "grunt-contrib-watch": "~ 0.3.1",
     "grunt-jessie": "~ 0.0.1",
-    "sinon": "~ 1.6.0"
+    "gulp": "^3.8.7",
+    "gulp-coffee": "^2.1.2",
+    "gulp-concat": "^2.3.4",
+    "gulp-jasmine": "^1.0.0",
+    "gulp-sourcemaps": "^1.1.1",
+    "gulp-uglify": "^0.3.1",
+    "gulp-wrapper": "^0.1.5",
+    "sinon": "^1.10.3"
   }
 }

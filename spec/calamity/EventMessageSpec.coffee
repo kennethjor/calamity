@@ -1,5 +1,6 @@
-{EventBus, EventMessage} = require "../../../calamity"
+{EventBus, EventMessage} = require "../../calamity"
 sinon = require "sinon"
+_ = require "underscore"
 
 describe "EventMessage", ->
 
@@ -12,7 +13,7 @@ describe "EventMessage", ->
 		expect(msg.address).toBe "address"
 		expect(msg.data).toBe "data"
 
-	it "should remember if it has seen a bus or not", ->
+	it "should remember if it has seen a bus or not", -> # <-- REMOVE
 		msg = new EventMessage
 		bus = new EventBus
 		expect(msg.sawBus bus).toBe false
@@ -27,16 +28,15 @@ describe "EventMessage", ->
 			reply = sinon.spy()
 			message = new EventMessage "address", data:"foo", reply
 
-		it "should call reply handler when replied", ->
+		it "should call reply handler when replied to", (done) ->
 			message.reply()
-			waitsFor (-> reply.called), "Reply never called", 100
-			runs ->
+			_.defer ->
 				expect(reply.callCount).toBe 1
+				done()
 
-		it "should be provided with a successful EventMessage by default", ->
+		it "should be provided with a successful EventMessage by default", (done) ->
 			message.reply foo:"foo"
-			waitsFor (-> reply.called), "Reply never called", 100
-			runs ->
+			_.defer ->
 				replyMsg = reply.args[0][0]
 				expect(replyMsg instanceof EventMessage).toBe true
 				expect(replyMsg.data.foo).toBe "foo"
@@ -44,13 +44,13 @@ describe "EventMessage", ->
 				expect(replyMsg.error).toBe null
 				expect(replyMsg.isSuccess()).toBe true
 				expect(replyMsg.isError()).toBe false
+				done()
 
-		it "should handle error replies", ->
+		it "should handle error replies", (done) ->
 			try
 				throw new Error "Foo"
 			catch error then message.replyError error, foo:"foo"
-			waitsFor (-> reply.called), "Reply never called", 100
-			runs ->
+			_.defer ->
 				expect(reply.callCount).toBe 1
 				call = reply.getCall 0
 				replyMsg = call.args[0]
@@ -62,6 +62,7 @@ describe "EventMessage", ->
 				expect(replyMsg.data.foo).toBe "foo"
 				expect(replyMsg.isSuccess()).toBe false
 				expect(replyMsg.isError()).toBe true
+				done()
 
 	describe "serialization", ->
 		msg = null
@@ -80,7 +81,7 @@ describe "EventMessage", ->
 			reply = sinon.spy()
 			msg = new EventMessage address, data, reply
 
-		it "should convert to JSON", ->
+		it "should convert to JSON", (done) ->
 			json = msg.toJSON()
 			expect(json.calamity?).toBe true
 			expect(json.address).toBe address
@@ -92,19 +93,19 @@ describe "EventMessage", ->
 			# Replying should still work.
 			json = msg.toJSON()
 			json.reply.call @, foo:"foo"
-			waitsFor (-> reply.called), "Reply never called", 100
-			runs ->
+			_.defer ->
 				expect(reply.callCount).toBe 1
 				call = reply.getCall 0
 				expect(call.args[0] instanceof EventMessage).toBe true
 				expect(call.args[0].data.foo).toBe "foo"
+				done()
 
 		it "should not add a reply in the JSON if there is not reply handler", ->
 			msg = new EventMessage address, data
 			json = msg.toJSON()
 			expect(json.reply).toBe undefined
 
-		it "should deserialize from JSON", ->
+		it "should deserialize from JSON", (done) ->
 			json = msg.toJSON()
 			dmsg = EventMessage.fromJSON json
 			expect(typeof dmsg).toBe "object"
@@ -117,12 +118,12 @@ describe "EventMessage", ->
 
 			# Replying should work like before.
 			dmsg.reply foo:"foo"
-			waitsFor (-> reply.called), "Reply never called", 100
-			runs ->
+			_.defer ->
 				expect(reply.callCount).toBe 1
 				call = reply.getCall 0
 				expect(call.args[0] instanceof EventMessage).toBe true
 				expect(call.args[0].data.foo).toBe "foo"
+				done()
 
 	describe "variables", ->
 		data =
@@ -146,7 +147,7 @@ describe "EventMessage", ->
 		it "should throw errors on missing required values without a reply handler", ->
 			check = ->
 				msg.getRequired "doesntexist"
-			expect(check).toThrow "Variable \"doesntexist\" not found on message with address \"address\""
+			expect(check).toThrow new Error "Variable \"doesntexist\" not found on message with address \"address\""
 
 		it "should return deep values", ->
 			msg = new EventMessage "address",
@@ -156,14 +157,14 @@ describe "EventMessage", ->
 			expect(msg.getOptional "foo.a").toBe undefined
 			expect(msg.getRequired "foo.bar").toBe "abc"
 			test = -> msg.getRequired "foo.a"
-			expect(test).toThrow "Variable \"foo.a\" not found on message with address \"address\""
+			expect(test).toThrow new Error "Variable \"foo.a\" not found on message with address \"address\""
 
 		it "should support an empty dataset", ->
 			msg = new EventMessage "address", null
 			expect(msg.getOptional "nope").toBe undefined
 			test = ->
 				msg.getRequired "nope"
-			expect(test).toThrow("Variable \"nope\" not found on message with address \"address\"")
+			expect(test).toThrow new Error "Variable \"nope\" not found on message with address \"address\""
 
 
 	# Planned feature.
@@ -207,7 +208,7 @@ describe "EventMessage", ->
 
 			expect(replier.callCount).toBe 0
 
-		it "should propagate message errors unless it has a reply handler", ->
+		it "should propagate message errors unless it has a reply handler", (done) ->
 			# reply has an error:
 			# msg.catch reply, =>
 			# No reply should throw the exception directly.
@@ -216,45 +217,45 @@ describe "EventMessage", ->
 			expect(handler.callCount).toBe 0
 			# With reply handler should pass the error along.
 			msg.catch errorMsg, handler
-			waitsFor (-> replier.called), "Replier never called", 100
-			runs ->
+			_.defer ->
 				expect(replier.callCount).toBe 1
 				expect(handler.callCount).toBe 0
 				reply = replier.getCall(0).args[0]
 				expect(reply).toBe errorMsg
+				done()
 
-		it "should propagate real errors unless it has a reply handler", ->
+		it "should propagate real errors unless it has a reply handler", (done) ->
 			# reply *is* an error:
 			# msg.catch reply, =>
 			error = new Error "Error"
 			# No reply should throw the exception directly.
 			testNoReply = -> msgNoReply.catch error, handler
-			expect(testNoReply).toThrow "Error"
+			expect(testNoReply).toThrow new Error "Error"
 			expect(handler.callCount).toBe 0
 			# With reply handler should pass the error along.
 			msg.catch error, handler
-			waitsFor (-> replier.called), "Replier never called", 100
-			runs ->
+			_.defer ->
 				expect(replier.callCount).toBe 1
 				expect(handler.callCount).toBe 0
 				reply = replier.getCall(0).args[0]
 				expect(reply.status).toBe "error"
 				expect(reply.error.split("\n")[0]).toBe "Error: Error :: Error: Error"
+				done()
 
-		it "should propagate thrown errors unless it has a reply handler", ->
+		it "should propagate thrown errors unless it has a reply handler", (done) ->
 			# Supplied handler threw an error:
 			# msg.catch (reply) =>
 			handler = sinon.spy -> throw new Error "Error"
 			# No reply should throw the exception directly.
 			testNoReply = -> msgNoReply.catch handler
-			expect(testNoReply).toThrow "Error"
+			expect(testNoReply).toThrow new Error "Error"
 			expect(handler.callCount).toBe 1
 			# With reply handler should pass the error along.
 			msg.catch handler
-			waitsFor (-> replier.called), "Replier never called", 100
-			runs ->
+			_.defer ->
 				expect(replier.callCount).toBe 1
 				expect(handler.callCount).toBe 2
 				reply = replier.getCall(0).args[0]
 				expect(reply.status).toBe "error"
 				expect(reply.error.split("\n")[0]).toBe "Error: Error :: Error: Error"
+				done()
