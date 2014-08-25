@@ -7,7 +7,7 @@
 * *API change:* Removed `calamity.proxy()`, it didn't really make sense.
 * *API change:* Renamed `EventBus` to `Bus`.
 * *API change:* Renamed `EventMessage` to `Message`.
-* *API change:* Removed `Bridge`. It needs to be properly thought out before implementing.
+* *API change:* Rewrote `Bridge` to serve as a basic bridge that can be extended.
 * *Feature:* Implemented `replyError()` on `EventMessage` to allow for easy handling of errors.
 * *Feature:* Implemented `toJSON()`  and `fromJSON()` on `EventMessage`.
 * *Feature:* Implemented `getRequired()`  and `getOptional()` on `EventMessage` for data retrieval.
