@@ -25,9 +25,7 @@ else {
 	root['calamity'] = Calamity;
 }
 (function() {
-  var Bus, Emitter, EventBridge, GLOBAL_BUS, HEX, MemoryEventBridge, Message, Subscription, floor, getEmitterBus, hasEmitterBus, random, util,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+  var Bus, Emitter, GLOBAL_BUS, HEX, Message, Subscription, floor, getEmitterBus, hasEmitterBus, random, util;
 
   Bus = Calamity.Bus = (function() {
     function Bus() {
@@ -225,35 +223,6 @@ else {
   Calamity.emitter = function(obj) {
     return _.extend(obj, Emitter.prototype);
   };
-
-  EventBridge = Calamity.EventBridge = (function() {
-    Calamity.emitter(EventBridge.prototype);
-
-    function EventBridge() {}
-
-    return EventBridge;
-
-  })();
-
-  MemoryEventBridge = Calamity.MemoryEventBridge = (function(_super) {
-    __extends(MemoryEventBridge, _super);
-
-    function MemoryEventBridge() {
-      return MemoryEventBridge.__super__.constructor.apply(this, arguments);
-    }
-
-    MemoryEventBridge.prototype.handler = function(msg) {
-      var bus, _i, _len, _ref;
-      _ref = this._busses;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        bus = _ref[_i];
-        bus.publish(msg);
-      }
-    };
-
-    return MemoryEventBridge;
-
-  })(EventBridge);
 
   Message = Calamity.Message = (function() {
     function Message(address, data, replyHandler) {
