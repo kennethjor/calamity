@@ -127,3 +127,9 @@ EventBus = class Calamity.EventBus
 		for b in @_bridges
 			b.trigger address, data
 		return
+
+# We automatically construct a default global bus when needed.
+GLOBAL_BUS = null
+Calamity.bus = ->
+	GLOBAL_BUS or= new EventBus()
+	return GLOBAL_BUS

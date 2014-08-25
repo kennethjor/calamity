@@ -25,7 +25,7 @@ else {
 	root['calamity'] = Calamity;
 }
 (function() {
-  var EmitterMixin, EventBridge, EventBus, EventMessage, HEX, MemoryEventBridge, PROXY_GLOBAL_BUS, ProxyMixin, Subscription, floor, getEmitterBus, hasEmitterBus, random, util,
+  var EmitterMixin, EventBridge, EventBus, EventMessage, GLOBAL_BUS, HEX, MemoryEventBridge, Subscription, floor, getEmitterBus, hasEmitterBus, random, util,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -57,13 +57,8 @@ else {
   })();
 
   hasEmitterBus = function(obj) {
-    if (!obj._calamity) {
-      return false;
-    }
-    if (!obj._calamity.emitter) {
-      return false;
-    }
-    if (!obj._calamity.emitter.bus) {
+    var _ref, _ref1;
+    if ((obj != null ? (_ref = obj._calamity) != null ? (_ref1 = _ref.emitter) != null ? _ref1.bus : void 0 : void 0 : void 0) == null) {
       return false;
     }
     return true;
@@ -232,6 +227,13 @@ else {
     return EventBus;
 
   })();
+
+  GLOBAL_BUS = null;
+
+  Calamity.bus = function() {
+    GLOBAL_BUS || (GLOBAL_BUS = new EventBus());
+    return GLOBAL_BUS;
+  };
 
   EventMessage = Calamity.EventMessage = (function() {
     function EventMessage(address, data, replyHandler) {
@@ -440,44 +442,6 @@ else {
     return MemoryEventBridge;
 
   })(EventBridge);
-
-  ProxyMixin = Calamity.ProxyMixin = (function() {
-    function ProxyMixin() {}
-
-    ProxyMixin.prototype.subscribe = function(address, handler) {
-      return this._calamity.proxy.bus.subscribe(address, handler, this);
-    };
-
-    ProxyMixin.prototype.publish = function(address, data, reply) {
-      return this._calamity.proxy.bus.publish(address, data, reply);
-    };
-
-    ProxyMixin.prototype.send = function(address, data, reply) {
-      return this._calamity.proxy.bus.send(address, data, reply);
-    };
-
-    return ProxyMixin;
-
-  })();
-
-  PROXY_GLOBAL_BUS = null;
-
-  Calamity.global = function() {
-    PROXY_GLOBAL_BUS || (PROXY_GLOBAL_BUS = new EventBus());
-    return PROXY_GLOBAL_BUS;
-  };
-
-  Calamity.proxy = function(obj, bus) {
-    var c;
-    if (!(bus instanceof EventBus)) {
-      bus = C.global();
-    }
-    c = (obj._calamity || (obj._calamity = {}));
-    c.proxy = {
-      bus: bus
-    };
-    return _.extend(obj, ProxyMixin.prototype);
-  };
 
   Subscription = Calamity.Subscription = (function() {
     function Subscription(address, handler, context, bus) {
