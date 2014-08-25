@@ -1,4 +1,4 @@
-# # EventBus
+# # Bus
 # Manages passing events from publishers to subscribers.
 Bus = class Calamity.Bus
 	constructor: ->
