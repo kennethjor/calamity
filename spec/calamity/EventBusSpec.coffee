@@ -1,4 +1,4 @@
-C = require "../../calamity"
+calamity = require "../../calamity"
 sinon = require "sinon"
 _ = require "underscore"
 
@@ -6,7 +6,7 @@ describe "EventBus", ->
 	bus = null
 
 	beforeEach ->
-		bus = new C.EventBus()
+		bus = new calamity.EventBus()
 
 	it "should route to and execute the correct handlers", (done) ->
 		handler11 = sinon.spy()

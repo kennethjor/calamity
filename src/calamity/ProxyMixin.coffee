@@ -2,7 +2,7 @@
 # Mixin class for attaching global `EventBus` handling to objects.
 # It adds the `_subscribe()` and `_publish()` methods to the class, which automatically sets the context of any handler
 # to `this`.
-ProxyMixin = class C.ProxyMixin
+ProxyMixin = class Calamity.ProxyMixin
 	# ## `_subscribe()`
 	# Register a handler to an address with.
 	subscribe: (address, handler) ->
@@ -20,13 +20,13 @@ ProxyMixin = class C.ProxyMixin
 
 # We automatically construct a default global bus when needed.
 PROXY_GLOBAL_BUS = null
-C.global = ->
+Calamity.global = ->
 	PROXY_GLOBAL_BUS or= new EventBus()
 	return PROXY_GLOBAL_BUS
 
 # ## `Calamity.proxy()`
 # Adds proxy functionality.
-C.proxy = (obj, bus) ->
+Calamity.proxy = (obj, bus) ->
 	# Prepare bus.
 	unless bus instanceof EventBus
 		bus = C.global()

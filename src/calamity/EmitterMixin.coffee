@@ -1,7 +1,7 @@
 # # EmitterMixin
 # Mixin class for attaching an instance-local EventBus to objects.
 # It adds the `on()`, `off()`, and `_trigger()` methods to the object.
-EmitterMixin = class C.EmitterMixin
+EmitterMixin = class Calamity.EmitterMixin
 	# ## `on()`
 	# Register a handler to an address.
 	on: (address, handler, context) ->
@@ -37,5 +37,5 @@ getEmitterBus = (obj) ->
 
 # ## `Calamity.emitter()`
 # Adds emitter functionality.
-C.emitter = (obj) ->
+Calamity.emitter = (obj) ->
 	_.extend obj, EmitterMixin.prototype

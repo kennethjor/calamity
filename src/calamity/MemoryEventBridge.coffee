@@ -1,6 +1,6 @@
 # # MemoryEventBridge
 # `EventBridge` implementation which ties to `EventBus` instances together directly in memory.
-MemoryEventBridge = class C.MemoryEventBridge extends EventBridge
+MemoryEventBridge = class Calamity.MemoryEventBridge extends EventBridge
 	# ## `handler()`
 	# Repeating handler implementation.
 	handler: (msg) ->

@@ -1,6 +1,6 @@
 # # EventMessage
 # Represents a single message in the system.
-EventMessage = class C.EventMessage
+EventMessage = class Calamity.EventMessage
 	# Constructor.
 	constructor: (@address, @data = {}, replyHandler) ->
 		# Generate ID.
@@ -155,7 +155,7 @@ EventMessage = class C.EventMessage
 	# Converts the message to a plain JSON object for possible storage or transmission.
 	toJSON: ->
 		json =
-			calamity: C.version
+			calamity: Calamity.version
 			address: @address
 			data: @data
 			status: @status

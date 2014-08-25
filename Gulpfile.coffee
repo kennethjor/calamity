@@ -6,6 +6,7 @@ coffee = require "gulp-coffee"
 uglify = require "gulp-uglify"
 jasmine = require "gulp-jasmine"
 wrapper = require "gulp-wrapper"
+replace = require "gulp-replace"
 
 pkg = JSON.parse fs.readFileSync "package.json"
 
@@ -18,6 +19,7 @@ gulp.task "compile", ->
 		.pipe wrapper
 			header: "/*! #{pkg.fullname} #{pkg.version} - MIT license */\n" + "(function(){\n" + fs.readFileSync "src/init/init.js"
 			footer: "}).call(this);"
+		.pipe replace "%version%", pkg.version
 		.pipe sourcemaps.write ".",
 			includeContent: true
 			sourceRoot: "/calamity"

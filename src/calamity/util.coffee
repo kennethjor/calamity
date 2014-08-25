@@ -9,7 +9,7 @@ floor = Math.floor
 HEX = "0123456789abcdef".split ""
 
 # Generic utility functions.
-util = C.util =
+util = Calamity.util =
 	# Generates a 128 bit ID.
 	genId: ->
 		id = ""

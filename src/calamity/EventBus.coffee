@@ -1,6 +1,6 @@
 # # EventBus
 # Manages passing events from publishers to subscribers.
-EventBus = class C.EventBus
+EventBus = class Calamity.EventBus
 	constructor: ->
 		# Generate ID.
 		@id = util.genId()

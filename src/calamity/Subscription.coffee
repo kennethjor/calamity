@@ -1,6 +1,6 @@
 # # Subscription
 # Represents a subscription of a handler to an address on an bus.
-Subscription = class C.Subscription
+Subscription = class Calamity.Subscription
 	# Constructor.
 	constructor: (@address, @handler, @context, @bus) ->
 		@id = util.genId()

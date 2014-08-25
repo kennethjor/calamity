@@ -4,21 +4,21 @@ if (typeof _ === "undefined" && typeof require === "function") {
 }
 
 // Init Calamity object.
-var C = {version: "<%= pkg.version %>"};
+var Calamity = {version: "%version%"};
 
 var root = this
 // CommonJS
 if (typeof exports !== "undefined") {
 	if (typeof module !== "undefined" && module.exports) {
-		exports = module.exports = C;
+		exports = module.exports = Calamity;
 	}
-	exports.C = C;
+	exports.Calamity = Calamity;
 }
 // AMD
 else if (typeof define === "function" && define.amd) {
-    define(['calamity'], C);
+    define(['calamity'], Calamity);
 }
 // Browser
 else {
-	root['Calamity'] = C;
+	root['calamity'] = Calamity;
 }

@@ -16,8 +16,8 @@
 # * For `bus.publish` and `bus.send`:
 #    * `message`
 #
-EventBridge = class C.EventBridge
-	C.emitter @prototype
+EventBridge = class Calamity.EventBridge
+	Calamity.emitter @prototype
 
 	constructor: ->
 		# Nothing special here at the moment.

@@ -6,30 +6,30 @@ if (typeof _ === "undefined" && typeof require === "function") {
 }
 
 // Init Calamity object.
-var C = {version: "<%= pkg.version %>"};
+var Calamity = {version: "0.5.0-rc.7"};
 
 var root = this
 // CommonJS
 if (typeof exports !== "undefined") {
 	if (typeof module !== "undefined" && module.exports) {
-		exports = module.exports = C;
+		exports = module.exports = Calamity;
 	}
-	exports.C = C;
+	exports.Calamity = Calamity;
 }
 // AMD
 else if (typeof define === "function" && define.amd) {
-    define(['calamity'], C);
+    define(['calamity'], Calamity);
 }
 // Browser
 else {
-	root['Calamity'] = C;
+	root['calamity'] = Calamity;
 }
 (function() {
   var EmitterMixin, EventBridge, EventBus, EventMessage, HEX, MemoryEventBridge, PROXY_GLOBAL_BUS, ProxyMixin, Subscription, floor, getEmitterBus, hasEmitterBus, random, util,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-  EmitterMixin = C.EmitterMixin = (function() {
+  EmitterMixin = Calamity.EmitterMixin = (function() {
     function EmitterMixin() {}
 
     EmitterMixin.prototype.on = function(address, handler, context) {
@@ -76,12 +76,12 @@ else {
     return emitter.bus || (emitter.bus = new EventBus());
   };
 
-  C.emitter = function(obj) {
+  Calamity.emitter = function(obj) {
     return _.extend(obj, EmitterMixin.prototype);
   };
 
-  EventBridge = C.EventBridge = (function() {
-    C.emitter(EventBridge.prototype);
+  EventBridge = Calamity.EventBridge = (function() {
+    Calamity.emitter(EventBridge.prototype);
 
     function EventBridge() {}
 
@@ -89,7 +89,7 @@ else {
 
   })();
 
-  EventBus = C.EventBus = (function() {
+  EventBus = Calamity.EventBus = (function() {
     function EventBus() {
       this.id = util.genId();
       this._subscriptions = {};
@@ -233,7 +233,7 @@ else {
 
   })();
 
-  EventMessage = C.EventMessage = (function() {
+  EventMessage = Calamity.EventMessage = (function() {
     function EventMessage(address, data, replyHandler) {
       this.address = address;
       this.data = data != null ? data : {};
@@ -391,7 +391,7 @@ else {
     EventMessage.prototype.toJSON = function() {
       var json;
       json = {
-        calamity: C.version,
+        calamity: Calamity.version,
         address: this.address,
         data: this.data,
         status: this.status,
@@ -421,7 +421,7 @@ else {
 
   })();
 
-  MemoryEventBridge = C.MemoryEventBridge = (function(_super) {
+  MemoryEventBridge = Calamity.MemoryEventBridge = (function(_super) {
     __extends(MemoryEventBridge, _super);
 
     function MemoryEventBridge() {
@@ -441,7 +441,7 @@ else {
 
   })(EventBridge);
 
-  ProxyMixin = C.ProxyMixin = (function() {
+  ProxyMixin = Calamity.ProxyMixin = (function() {
     function ProxyMixin() {}
 
     ProxyMixin.prototype.subscribe = function(address, handler) {
@@ -462,12 +462,12 @@ else {
 
   PROXY_GLOBAL_BUS = null;
 
-  C.global = function() {
+  Calamity.global = function() {
     PROXY_GLOBAL_BUS || (PROXY_GLOBAL_BUS = new EventBus());
     return PROXY_GLOBAL_BUS;
   };
 
-  C.proxy = function(obj, bus) {
+  Calamity.proxy = function(obj, bus) {
     var c;
     if (!(bus instanceof EventBus)) {
       bus = C.global();
@@ -479,7 +479,7 @@ else {
     return _.extend(obj, ProxyMixin.prototype);
   };
 
-  Subscription = C.Subscription = (function() {
+  Subscription = Calamity.Subscription = (function() {
     function Subscription(address, handler, context, bus) {
       this.address = address;
       this.handler = handler;
@@ -519,7 +519,7 @@ else {
 
   HEX = "0123456789abcdef".split("");
 
-  util = C.util = {
+  util = Calamity.util = {
     genId: function() {
       var i, id, _i;
       id = "";
