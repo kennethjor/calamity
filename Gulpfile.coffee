@@ -15,7 +15,8 @@ gulp.task "compile", ->
 		.pipe sourcemaps.init
 			loadMaps: true
 		.pipe concat "calamity.coffee"
-		.pipe coffee()
+		.pipe coffee
+			bare: true
 		.pipe wrapper
 			header: "/*! #{pkg.fullname} #{pkg.version} - MIT license */\n" + "(function(){\n" + fs.readFileSync "src/init/init.js"
 			footer: "}).call(this);"
