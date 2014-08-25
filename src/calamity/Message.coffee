@@ -1,6 +1,6 @@
-# # EventMessage
+# # Message
 # Represents a single message in the system.
-EventMessage = class Calamity.EventMessage
+Message = class Calamity.Message
 	# Constructor.
 	constructor: (@address, @data = {}, replyHandler) ->
 		# Generate ID.
@@ -23,8 +23,8 @@ EventMessage = class Calamity.EventMessage
 		# Don't do anything if we don't have a reply handler.
 		return unless _.isFunction(replyHandler)
 		# Wrap data and further replies in another message.
-		unless data instanceof EventMessage
-			data = new EventMessage null, data, replier
+		unless data instanceof Message
+			data = new Message null, data, replier
 		# Execute.
 		replyHandler data
 #		_.defer ->
@@ -48,7 +48,7 @@ EventMessage = class Calamity.EventMessage
 				if data.stack
 					error += " :: " + data.stack
 		# Create new error message.
-		msg = new EventMessage null, data
+		msg = new Message null, data
 		msg.status = "error"
 		msg.error = error
 		# Send reply.
@@ -65,7 +65,7 @@ EventMessage = class Calamity.EventMessage
 	# If no errors are detected, it will execute the supplied handler inside a try/catch block, and pass
 	# any errors back through msg.
 	# If no reply handler exists on msg, errors will be rethrown, or no try/catch block will be used.
-	# The first argument is optional and can be an EventMessage, or any throwable value.
+	# The first argument is optional and can be an Message, or any throwable value.
 	# If it's falsy, then it's simply ignored and handler is executed.
 	catch: (other, handler) ->
 		unless handler?
@@ -77,7 +77,7 @@ EventMessage = class Calamity.EventMessage
 		unless _.isFunction @_replyHandler
 			# Throw error if we have one.
 			if other?
-				if other instanceof EventMessage
+				if other instanceof Message
 					if other.isError()
 						throw other.error
 				else
@@ -89,7 +89,7 @@ EventMessage = class Calamity.EventMessage
 		else
 			# Pass supplied errors.
 			if other?
-				if other instanceof EventMessage
+				if other instanceof Message
 					if other.isError()
 						@reply other
 						return
@@ -165,12 +165,12 @@ EventMessage = class Calamity.EventMessage
 		return json
 
 	# ## `fromJSON()`
-	# Converts a JSON object to an EventMessage.
-	# The message must have been serialized using `EventMessage`'s own `toJSON()` method, otherwise weird things could happen.
+	# Converts a JSON object to an Message.
+	# The message must have been serialized using `Message`'s own `toJSON()` method, otherwise weird things could happen.
 	@fromJSON = (json) ->
 		throw new Error "JSON must be an object" unless _.isObject json
 		throw new Error "Serialized JSON is not for calamity: #{JSON.stringify(json)}" unless json.calamity?
-		msg = new EventMessage json.address, json.data, json.reply
+		msg = new Message json.address, json.data, json.reply
 		msg.status = json.status
 		msg.error = json.error
 		return msg

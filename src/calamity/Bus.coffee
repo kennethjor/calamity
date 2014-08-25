@@ -93,10 +93,10 @@ Bus = class Calamity.Bus
 
 	# Utility function for creating messages.
 	_createMessage: (address, data, reply) ->
-		# Construct new EventMessage is necesarry.
+		# Construct new Message is necesarry.
 		msg = address
-		unless msg instanceof EventMessage
-			msg = new EventMessage address, data, reply
+		unless msg instanceof Message
+			msg = new Message address, data, reply
 		return msg
 
 	# Publishes a message to an address.

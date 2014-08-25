@@ -1,20 +1,20 @@
-{Bus, EventMessage} = require "../../calamity"
+{Bus, Message} = require "../../calamity"
 sinon = require "sinon"
 _ = require "underscore"
 
-describe "EventMessage", ->
+describe "Message", ->
 
 	it "should be empty when created", ->
-		msg = new EventMessage
-		expect(msg instanceof EventMessage).toBe true
+		msg = new Message
+		expect(msg instanceof Message).toBe true
 
 	it "should create a message with correct address and data", ->
-		msg = new EventMessage "address", "data"
+		msg = new Message "address", "data"
 		expect(msg.address).toBe "address"
 		expect(msg.data).toBe "data"
 
 	it "should remember if it has seen a bus or not", -> # <-- REMOVE
-		msg = new EventMessage
+		msg = new Message
 		bus = new Bus
 		expect(msg.sawBus bus).toBe false
 		msg.addBus bus
@@ -26,7 +26,7 @@ describe "EventMessage", ->
 		reply = null
 		beforeEach ->
 			reply = sinon.spy()
-			message = new EventMessage "address", data:"foo", reply
+			message = new Message "address", data:"foo", reply
 
 		it "should call reply handler when replied to", (done) ->
 			message.reply()
@@ -34,11 +34,11 @@ describe "EventMessage", ->
 				expect(reply.callCount).toBe 1
 				done()
 
-		it "should be provided with a successful EventMessage by default", (done) ->
+		it "should be provided with a successful Message by default", (done) ->
 			message.reply foo:"foo"
 			_.defer ->
 				replyMsg = reply.args[0][0]
-				expect(replyMsg instanceof EventMessage).toBe true
+				expect(replyMsg instanceof Message).toBe true
 				expect(replyMsg.data.foo).toBe "foo"
 				expect(replyMsg.status).toBe "ok"
 				expect(replyMsg.error).toBe null
@@ -54,7 +54,7 @@ describe "EventMessage", ->
 				expect(reply.callCount).toBe 1
 				call = reply.getCall 0
 				replyMsg = call.args[0]
-				expect(replyMsg instanceof EventMessage).toBe true
+				expect(replyMsg instanceof Message).toBe true
 				expect(replyMsg.status).toBe "error"
 				#expect(replyMsg.error).toBe "Error: Foo"
 				expect(replyMsg.data.message).toBe "Foo"
@@ -79,7 +79,7 @@ describe "EventMessage", ->
 
 		beforeEach ->
 			reply = sinon.spy()
-			msg = new EventMessage address, data, reply
+			msg = new Message address, data, reply
 
 		it "should convert to JSON", (done) ->
 			json = msg.toJSON()
@@ -96,21 +96,21 @@ describe "EventMessage", ->
 			_.defer ->
 				expect(reply.callCount).toBe 1
 				call = reply.getCall 0
-				expect(call.args[0] instanceof EventMessage).toBe true
+				expect(call.args[0] instanceof Message).toBe true
 				expect(call.args[0].data.foo).toBe "foo"
 				done()
 
 		it "should not add a reply in the JSON if there is not reply handler", ->
-			msg = new EventMessage address, data
+			msg = new Message address, data
 			json = msg.toJSON()
 			expect(json.reply).toBe undefined
 
 		it "should deserialize from JSON", (done) ->
 			json = msg.toJSON()
-			dmsg = EventMessage.fromJSON json
+			dmsg = Message.fromJSON json
 			expect(typeof dmsg).toBe "object"
 			expect(dmsg).not.toBe msg
-			expect(dmsg instanceof EventMessage).toBe true
+			expect(dmsg instanceof Message).toBe true
 			expect(dmsg.address).toBe address
 			expect(dmsg.status).toBe "ok"
 			expect(dmsg.error).toBe null
@@ -121,7 +121,7 @@ describe "EventMessage", ->
 			_.defer ->
 				expect(reply.callCount).toBe 1
 				call = reply.getCall 0
-				expect(call.args[0] instanceof EventMessage).toBe true
+				expect(call.args[0] instanceof Message).toBe true
 				expect(call.args[0].data.foo).toBe "foo"
 				done()
 
@@ -131,7 +131,7 @@ describe "EventMessage", ->
 			bar: "b"
 		msg = null
 		beforeEach ->
-			msg = new EventMessage "address", data
+			msg = new Message "address", data
 
 		it "should return optional values", ->
 			expect(msg.getOptional "foo").toBe "a"
@@ -150,7 +150,7 @@ describe "EventMessage", ->
 			expect(check).toThrow new Error "Variable \"doesntexist\" not found on message with address \"address\""
 
 		it "should return deep values", ->
-			msg = new EventMessage "address",
+			msg = new Message "address",
 				foo:
 					bar: "abc"
 			expect(msg.getOptional "foo.bar").toBe "abc"
@@ -160,7 +160,7 @@ describe "EventMessage", ->
 			expect(test).toThrow new Error "Variable \"foo.a\" not found on message with address \"address\""
 
 		it "should support an empty dataset", ->
-			msg = new EventMessage "address", null
+			msg = new Message "address", null
 			expect(msg.getOptional "nope").toBe undefined
 			test = ->
 				msg.getRequired "nope"
@@ -177,9 +177,9 @@ describe "EventMessage", ->
 		beforeEach ->
 			replier = sinon.spy()
 			handler = sinon.spy()
-			msg = new EventMessage "address", null, replier
-			msgNoReply = new EventMessage "address"
-			errorMsg = new EventMessage
+			msg = new Message "address", null, replier
+			msgNoReply = new Message "address"
+			errorMsg = new Message
 			errorMsg.status = "error"
 			errorMsg.error = "Error"
 

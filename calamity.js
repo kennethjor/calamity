@@ -25,7 +25,7 @@ else {
 	root['calamity'] = Calamity;
 }
 (function() {
-  var Bus, Emitter, EventBridge, EventMessage, GLOBAL_BUS, HEX, MemoryEventBridge, Subscription, floor, getEmitterBus, hasEmitterBus, random, util,
+  var Bus, Emitter, EventBridge, GLOBAL_BUS, HEX, MemoryEventBridge, Message, Subscription, floor, getEmitterBus, hasEmitterBus, random, util,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -126,8 +126,8 @@ else {
     Bus.prototype._createMessage = function(address, data, reply) {
       var msg;
       msg = address;
-      if (!(msg instanceof EventMessage)) {
-        msg = new EventMessage(address, data, reply);
+      if (!(msg instanceof Message)) {
+        msg = new Message(address, data, reply);
       }
       return msg;
     };
@@ -235,8 +235,28 @@ else {
 
   })();
 
-  EventMessage = Calamity.EventMessage = (function() {
-    function EventMessage(address, data, replyHandler) {
+  MemoryEventBridge = Calamity.MemoryEventBridge = (function(_super) {
+    __extends(MemoryEventBridge, _super);
+
+    function MemoryEventBridge() {
+      return MemoryEventBridge.__super__.constructor.apply(this, arguments);
+    }
+
+    MemoryEventBridge.prototype.handler = function(msg) {
+      var bus, _i, _len, _ref;
+      _ref = this._busses;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        bus = _ref[_i];
+        bus.publish(msg);
+      }
+    };
+
+    return MemoryEventBridge;
+
+  })(EventBridge);
+
+  Message = Calamity.Message = (function() {
+    function Message(address, data, replyHandler) {
       this.address = address;
       this.data = data != null ? data : {};
       this.id = util.genId();
@@ -249,20 +269,20 @@ else {
       this.error = null;
     }
 
-    EventMessage.prototype.reply = function(data, replier) {
+    Message.prototype.reply = function(data, replier) {
       var replyHandler;
       replyHandler = this._replyHandler;
       if (!_.isFunction(replyHandler)) {
         return;
       }
-      if (!(data instanceof EventMessage)) {
-        data = new EventMessage(null, data, replier);
+      if (!(data instanceof Message)) {
+        data = new Message(null, data, replier);
       }
       replyHandler(data);
       return this;
     };
 
-    EventMessage.prototype.replyError = function(error, data) {
+    Message.prototype.replyError = function(error, data) {
       var msg, v, val, _i, _len, _ref;
       if (data == null) {
         data = {};
@@ -285,14 +305,14 @@ else {
           }
         }
       }
-      msg = new EventMessage(null, data);
+      msg = new Message(null, data);
       msg.status = "error";
       msg.error = error;
       this.reply(msg);
       return this;
     };
 
-    EventMessage.prototype["catch"] = function(other, handler) {
+    Message.prototype["catch"] = function(other, handler) {
       var err;
       if (handler == null) {
         if (!_.isFunction(other)) {
@@ -303,7 +323,7 @@ else {
       }
       if (!_.isFunction(this._replyHandler)) {
         if (other != null) {
-          if (other instanceof EventMessage) {
+          if (other instanceof Message) {
             if (other.isError()) {
               throw other.error;
             }
@@ -317,7 +337,7 @@ else {
         handler(other);
       } else {
         if (other != null) {
-          if (other instanceof EventMessage) {
+          if (other instanceof Message) {
             if (other.isError()) {
               this.reply(other);
               return;
@@ -339,15 +359,15 @@ else {
       }
     };
 
-    EventMessage.prototype.isSuccess = function() {
+    Message.prototype.isSuccess = function() {
       return this.status === "ok";
     };
 
-    EventMessage.prototype.isError = function() {
+    Message.prototype.isError = function() {
       return this.status === "error";
     };
 
-    EventMessage.prototype.getOptional = function(param, def) {
+    Message.prototype.getOptional = function(param, def) {
       var part, parts, val, _i, _len, _ref;
       parts = param.split(".");
       val = this.data[parts[0]];
@@ -369,7 +389,7 @@ else {
       return val;
     };
 
-    EventMessage.prototype.getRequired = function(param) {
+    Message.prototype.getRequired = function(param) {
       var val;
       val = this.getOptional(param);
       if (typeof val === "undefined") {
@@ -378,7 +398,7 @@ else {
       return val;
     };
 
-    EventMessage.prototype.addBus = function(bus) {
+    Message.prototype.addBus = function(bus) {
       if (this.sawBus(bus)) {
         return this;
       }
@@ -386,11 +406,11 @@ else {
       return this;
     };
 
-    EventMessage.prototype.sawBus = function(bus) {
+    Message.prototype.sawBus = function(bus) {
       return _.contains(this._busses, bus.id);
     };
 
-    EventMessage.prototype.toJSON = function() {
+    Message.prototype.toJSON = function() {
       var json;
       json = {
         calamity: Calamity.version,
@@ -405,7 +425,7 @@ else {
       return json;
     };
 
-    EventMessage.fromJSON = function(json) {
+    Message.fromJSON = function(json) {
       var msg;
       if (!_.isObject(json)) {
         throw new Error("JSON must be an object");
@@ -413,35 +433,15 @@ else {
       if (json.calamity == null) {
         throw new Error("Serialized JSON is not for calamity: " + (JSON.stringify(json)));
       }
-      msg = new EventMessage(json.address, json.data, json.reply);
+      msg = new Message(json.address, json.data, json.reply);
       msg.status = json.status;
       msg.error = json.error;
       return msg;
     };
 
-    return EventMessage;
+    return Message;
 
   })();
-
-  MemoryEventBridge = Calamity.MemoryEventBridge = (function(_super) {
-    __extends(MemoryEventBridge, _super);
-
-    function MemoryEventBridge() {
-      return MemoryEventBridge.__super__.constructor.apply(this, arguments);
-    }
-
-    MemoryEventBridge.prototype.handler = function(msg) {
-      var bus, _i, _len, _ref;
-      _ref = this._busses;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        bus = _ref[_i];
-        bus.publish(msg);
-      }
-    };
-
-    return MemoryEventBridge;
-
-  })(EventBridge);
 
   Subscription = Calamity.Subscription = (function() {
     function Subscription(address, handler, context, bus) {
