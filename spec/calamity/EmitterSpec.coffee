@@ -4,13 +4,15 @@ _ = require "underscore"
 
 describe "Emitter", ->
 	obj = null
-	handler = sinon.spy()
+	handler = null
+	sub = null
 	beforeEach ->
 		obj = {}
 		calamity.emitter obj
+		handler = sinon.spy()
+		sub = obj.on "address", handler
 
 	it "should accept on, trigger, and off", (done) ->
-		obj.on "address", handler
 		obj.trigger "address", "data"
 		_.defer ->
 			expect(handler.callCount).toBe 1
@@ -21,10 +23,16 @@ describe "Emitter", ->
 				done()
 
 	it "should unsubscribe via subscription objects", (done) ->
-		sub = obj.on "address", handler
 		sub.unsubscribe()
 		obj.trigger "address", "data"
 		_.defer ->
-			expect(handler.callCount).toBe 1
+			expect(handler.callCount).toBe 0
 			done()
+
+	it "should isolate the busses of multiple objects", ->
+		obj2 = {}
+		calamity.emitter obj2
+		obj2.trigger "address"
+		_.defer ->
+			expect(handler.callCount).toBe 0
 
