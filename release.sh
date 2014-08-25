@@ -15,7 +15,7 @@ npm version $version
 bower version $version
 
 # Build.
-grunt
+gulp
 
 # Commit version.
 hg ci -m "Release version $version"

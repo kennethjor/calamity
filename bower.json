@@ -9,8 +9,16 @@
     "globals"
   ],
   "keywords": [
+    "broadcast",
+    "error",
     "events",
-    "pubsub"
+    "message",
+    "node",
+    "observer",
+    "publish",
+    "pubsub",
+    "subscribe",
+    "unsubscribe"
   ],
   "license": "MIT",
   "homepage": "https://bitbucket.org/kennethjor/calamity",

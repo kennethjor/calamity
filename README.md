@@ -1,6 +1,13 @@
-# Calamity
-Calamity allows you to drive your application through a global event bus, facilitating loosely-coupled event-driven architectures.
-Available via [npm](https://npmjs.org/package/calamity): `npm install calamity`.
+Calamity is a publish-subscribe event bus library, allowing for the building of loosely-coupled, event-driven applications.
+The event bus can either be used globally or it can be attached to individual objects, providing any object with the ability to publish local events.
+
+Install via NPM:
+
+    npm install --save calamity
+
+Or via Bower:
+
+    bower install --save calamity
 
 # Local event busses with `emitter()`.
 Local event busses are used on individual classes and objects to allow them to publish events others can subscribe to.

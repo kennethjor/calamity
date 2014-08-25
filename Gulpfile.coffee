@@ -39,6 +39,7 @@ gulp.task "minimize", ["compile"], ->
 		.pipe sourcemaps.write ".",
 			includeContent: true
 			sourceRoot: "/calamity"
+			addComment: false
 		.pipe gulp.dest "."
 
 gulp.task "watch", ->
