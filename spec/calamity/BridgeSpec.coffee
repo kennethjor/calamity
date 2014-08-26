@@ -30,9 +30,9 @@ describe "Bridge", ->
 		msg = new calamity.Message()
 		bridge.seen msg
 		_.delay (->
-			expect(bridge.seen msg).toBe false
+			expect(bridge.seen msg, false).toBe false
 			done()
-		), 150
+		), bridge.SEEN_TIME + 10
 
 
 	it "should transfer messages from one bus to another", (done) ->

@@ -1,12 +1,17 @@
 # # Bridge
 # Allows multiple busses to be linked together.
 Bridge = class Calamity.Bridge
+	# The number of miliseconds to remember seen messages for.
+	SEEN_TIME: 500
+	# All busses connected by thisbcridge.
 	_busses: null
+	# A temporary record of all messages seen.
 	_seen: null
+	# The timeout ID of the next cleaning of seen messages.
 	_cleanId: null
 
 	constructor: (busses...) ->
-		@_seen = []
+		@_seen = {}
 		@_busses = busses
 		for bus in busses
 			@subscribeBus bus
@@ -29,30 +34,35 @@ Bridge = class Calamity.Bridge
 
 	# Returns true if the supplied message has been seen previously.
 	# Unless `save` is set to false, the message will be saved as seen.
-	seen: (msg, save=true) ->
-		for entry in @_seen
-			if entry.id is msg.id
-				return true
+	seen: (msg, save = true) ->
+		# Returns true if message has been seen and its time limit is within the bounds.
+		limit = new Date().getTime() - @SEEN_TIME
+		time = @_seen[msg.id]
+		if time? and time > limit
+			return true
 		# Message not seen, save it.
 		if save
-			@_seen.push
-				id: msg.id,
-				time: new Date().getTime()
-			@scheduleClean()
+			@_seen[msg.id] = new Date().getTime()
+			@_scheduleClean()
 		return false
 
 	# Schedules a cleanout of the seen messages.
-	scheduleClean: ->
+	_scheduleClean: ->
 		return if @_cleanId
-		@_cleanId = setTimeout
-		_.delay (=>
-			seen = @_seen
-			limit = new Date().getTime() - 100
-			i = 0
-			while i < seen.length
-				if seen[i].time < limit
-					seen.splice i, 1
-				else
-					i++
+		@_cleanId = _.delay (=>
+			@_clean()
+			# Schedule another if we still have messages.
+			unless _.isEmpty @_seen
+				@_scheduleClean()
 			return
-		), 100
+		), @SEEN_TIME
+		return
+
+	# Clean the seen messages.
+	_clean: ->
+		seen = @_seen
+		limit = new Date().getTime() - @SEEN_TIME
+		for own id, time of seen
+			if time < limit
+				delete seen[id]
+		return

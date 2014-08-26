@@ -25,9 +25,12 @@ else {
 	root['calamity'] = Calamity;
 }
 var Bridge, Bus, Emitter, GLOBAL_BUS, HEX, Message, Subscription, floor, getEmitterBus, hasEmitterBus, random, util,
-  __slice = [].slice;
+  __slice = [].slice,
+  __hasProp = {}.hasOwnProperty;
 
 Bridge = Calamity.Bridge = (function() {
+  Bridge.prototype.SEEN_TIME = 500;
+
   Bridge.prototype._busses = null;
 
   Bridge.prototype._seen = null;
@@ -37,7 +40,7 @@ Bridge = Calamity.Bridge = (function() {
   function Bridge() {
     var bus, busses, _i, _len;
     busses = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-    this._seen = [];
+    this._seen = {};
     this._busses = busses;
     for (_i = 0, _len = busses.length; _i < _len; _i++) {
       bus = busses[_i];
@@ -71,47 +74,47 @@ Bridge = Calamity.Bridge = (function() {
   };
 
   Bridge.prototype.seen = function(msg, save) {
-    var entry, _i, _len, _ref;
+    var limit, time;
     if (save == null) {
       save = true;
     }
-    _ref = this._seen;
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      entry = _ref[_i];
-      if (entry.id === msg.id) {
-        return true;
-      }
+    limit = new Date().getTime() - this.SEEN_TIME;
+    time = this._seen[msg.id];
+    if ((time != null) && time > limit) {
+      return true;
     }
     if (save) {
-      this._seen.push({
-        id: msg.id,
-        time: new Date().getTime()
-      });
-      this.scheduleClean();
+      this._seen[msg.id] = new Date().getTime();
+      this._scheduleClean();
     }
     return false;
   };
 
-  Bridge.prototype.scheduleClean = function() {
+  Bridge.prototype._scheduleClean = function() {
     if (this._cleanId) {
       return;
     }
-    this._cleanId = setTimeout;
-    return _.delay(((function(_this) {
+    this._cleanId = _.delay(((function(_this) {
       return function() {
-        var i, limit, seen;
-        seen = _this._seen;
-        limit = new Date().getTime() - 100;
-        i = 0;
-        while (i < seen.length) {
-          if (seen[i].time < limit) {
-            seen.splice(i, 1);
-          } else {
-            i++;
-          }
+        _this._clean();
+        if (!_.isEmpty(_this._seen)) {
+          _this._scheduleClean();
         }
       };
-    })(this)), 100);
+    })(this)), this.SEEN_TIME);
+  };
+
+  Bridge.prototype._clean = function() {
+    var id, limit, seen, time;
+    seen = this._seen;
+    limit = new Date().getTime() - this.SEEN_TIME;
+    for (id in seen) {
+      if (!__hasProp.call(seen, id)) continue;
+      time = seen[id];
+      if (time < limit) {
+        delete seen[id];
+      }
+    }
   };
 
   return Bridge;
