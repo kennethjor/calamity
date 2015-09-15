@@ -1,7 +1,7 @@
 {
   "fullname": "Calamity",
   "name": "calamity",
-  "version": "0.5.0-rc.7",
+  "version": "0.5.0-dev",
   "description": "Event bus and publish/subscribe library with replies for any environment, allowing easy implementation of both local and global events for building de-coupled, event-driven applications.",
   "keywords": [
     "broadcast",
